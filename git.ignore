@@ -1,7 +1,0 @@
-# Node.js / React
-node_modules/
-build/
-.DS_Store
-
-# Firebase
-firebase-config.js
