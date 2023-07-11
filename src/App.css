@@ -19,13 +19,13 @@
 .gray-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   justify-content: center;
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 55%;
+  left: 25%;
   transform: translate(-50%, -50%);
-  width: 80%;
+  width: 50%;
   height: 30%;
   padding: 5%;
   margin-top: -50px;
@@ -39,10 +39,10 @@
 
 .title {
   font-family: "Monsteratt", sans-serif;
-  font-size: 5.5rem;
+  font-size: 3.75rem;
   color: white;
   z-index: 1;
-  text-align: center;
+  text-align: left;
 }
 
 .titlechild {
@@ -50,7 +50,13 @@
   font-style: italic;
   font-size: 1.5rem;
   z-index: 2;
-  text-align: center;
+  text-align: left;
   text-decoration: underline;
 }
 
+/* requestBorrower.js */
+.reqBor_container {
+  right: 5%;
+  margin-top: 6%;
+  z-index: 2;
+}

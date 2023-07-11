@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Layouts
 import NavbarBorrower from './layouts/navbarBorrower';
+import RequestBorrower from './layouts/requestBorrower';
 
 //Images
 import USChome from '../images/USChome.jpg';
@@ -13,6 +14,7 @@ const Home = () => {
     return (
       <div>
         <NavbarBorrower />
+        <RequestBorrower />
         <div style={{ backgroundImage: `url(${USChome})` }} className="background-image">
           <div className="gray-container">
             <img src={USClogo} alt="USC Logo" className="usc-logo" /> {/* Add the USC logo */}
