@@ -4,13 +4,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 //Layouts
 import NavbarBorrower from './layouts/navbarBorrower';
+import NavbarUser from './layouts/navbarUser';
 
 const App = () => {
   return (
     <div>
-      <NavbarBorrower>
-        <button className="btn btn-primary">Click me</button>
-      </NavbarBorrower>
+      <NavbarUser>
+      </NavbarUser>
     </div>
   );
   
