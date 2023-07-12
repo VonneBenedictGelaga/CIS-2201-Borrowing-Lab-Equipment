@@ -1,0 +1,29 @@
+.navbar-list {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+}
+
+.navbar-item {
+  margin-right: 10px;
+}
+
+.navbar-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+  font-size: 16px;
+}
+
+.logo {
+  width: 10px; /* Adjust the width of the logo div */
+  height: 5px; /* Adjust the height of the logo div */
+}
+
+.logo-image {
+  width: 10%;
+  height: 10%;
+  object-fit: contain;
+}
