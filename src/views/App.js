@@ -5,13 +5,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 //Layouts
 import NavbarBorrower from './layouts/navbarBorrower';
 import NavbarUser from './layouts/navbarUser';
+import ViewRequests from './layouts/viewRequests'
 
 const App = () => {
   return (
-    <div>
-      <NavbarUser>
-      </NavbarUser>
-    </div>
+    <>
+      <NavbarUser />
+      <ViewRequests />
+    </>
   );
   
 };
