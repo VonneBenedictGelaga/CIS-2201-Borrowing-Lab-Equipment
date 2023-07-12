@@ -32,16 +32,6 @@ const NavbarUser = ({ children }) => {
 
         </div>
       </nav>
-
-      {/* Content */}
-      <main>
-        {children}
-      </main>
-
-      {/* Common footer */}
-      <footer>
-        {/* Footer content */}
-      </footer>
     </>
   );
 };
