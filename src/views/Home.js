@@ -3,7 +3,7 @@ import '../App.css'; // Assuming you have a CSS file for styling
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 
 // Layouts
-import NavbarBorrower from './layouts/navbarBorrower';
+import NavbarBorrower from '../views/layouts/navbarBorrower.js';
 
 //Images
 import USChome from '../images/USChome.jpg';
