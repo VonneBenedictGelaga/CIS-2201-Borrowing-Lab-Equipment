@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Layouts
 import NavbarBorrower from './layouts/navbarBorrower';
-import RequestBorrower from './layouts/requestBorrower';
+import RequestBorrower from './layouts/requestBorrower.js';
 
 //Images
 import USChome from '../images/USChome.jpg';

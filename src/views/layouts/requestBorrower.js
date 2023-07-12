@@ -1,25 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { signInWithGoogle } from "../../config/reqBorrowerConf";
+import { sendEmailVerification } from 'firebase/auth';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import auth from '../../config/firebase';
 
 const RequestBorrower = () => {
   const [email, setEmail] = useState('');
   const [isVerified, setIsVerified] = useState(false);
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
+  const [isInvalidEmail2, setIsInvalidEmail2] = useState(false);
 
-  const handleSignIn = async () => {
-    try {
-      const isUserVerified = await signInWithGoogle(); 
-      setIsVerified(isUserVerified);
-      setIsInvalidEmail(!isUserVerified);
-    } catch (error) {
-      console.log('An error occurred during sign-in:', error);
+  useEffect(() => {
+    checkEmailVerification();
+  }, []);
+
+  const handleSignIn = async (event) => {
+    event.preventDefault();
+
+    const enteredEmail = email.trim();
+
+    if (enteredEmail.endsWith('usc.edu.ph')) {
+      try {
+        // Send email verification
+        await sendEmailVerification(auth.currentUser);
+
+        setIsInvalidEmail(false);
+        setIsInvalidEmail2(true);
+      } catch (error) {
+        console.log('An error occurred during verification:', error);
+        setIsInvalidEmail(true);
+        setIsInvalidEmail2(false);
+      }
+    } else {
       setIsInvalidEmail(true);
+      setIsInvalidEmail2(false);
     }
   };
 
-return (
+  const checkEmailVerification = () => {
+    const user = auth.currentUser;
+    if (user && user.emailVerified) {
+      setIsVerified(true);
+      setIsInvalidEmail(false);
+      setIsInvalidEmail2(false);
+    } else {
+      setIsVerified(false);
+      setIsInvalidEmail(false);
+      setIsInvalidEmail2(false);
+    }
+  };
+
+  const storeUserInformation = async (email) => {
+    try {
+      const db = getFirestore();
+      const usersRef = collection(db, 'Users');
+      const newUser = { email: email };
+  
+      await addDoc(usersRef, newUser);
+      console.log('User information stored successfully!');
+    } catch (error) {
+      console.log('An error occurred while storing user information:', error);
+    }
+  };  
+
+  useEffect(() => {
+    if (isVerified) {
+      // Call the function to store user information after verification
+      storeUserInformation(email);
+    }
+  }, [isVerified]);
+
+  return (
     <div className="card bg-white mb-3 reqBor_container" style={{ width: '32rem', float: 'right' }}>
       <div className="card-header">
         {isVerified ? 'Update Form' : 'User Login'}
@@ -33,41 +85,43 @@ return (
             </div>
           </>
         )}
-{isVerified ? (
+        {isInvalidEmail2 && (
+          <>
+            <p>Please log in with your USC email to proceed:</p>
+            <div className="alert alert-success" role="alert">
+              A verification link has been sent to your email.
+            </div>
+          </>
+        )}
+        {isVerified ? (
           <form className="d-flex flex-column" method="POST">
-            <label htmlFor="edit2_borrowers_name">Borrower's Name</label>
-            <input className="form-control mb-2" name="edit2_borrowers_name" type="text" placeholder="e.g. Ivanne Dave L. Bayer" required/>
-
-            <label htmlFor="edit2_reason">Reason for Borrowing</label>
-            <textarea className="form-control mb-2" name="edit2_reason" rows="2" required></textarea>
-
-            <label htmlFor="edit2_equipment">Equipment to Borrow</label>
-            <select className="form-select mb-2" name="edit2_equipment" aria-label="Equipment to Borrow" required>
-              <option value="Laptop">Laptop</option>
-              <option value="Camera">Camera</option>
-              <option value="Projector">Projector</option>
-            </select>
-            <label htmlFor="edit2_date_borrow">Date of Borrowing Equipment</label>
-            <input className="form-control mb-2" name="edit2_date_borrow" type="date" required/>
-            <label htmlFor="edit2_date_return">Date of Returning Equipment</label>
-            <input className="form-control mb-2" name="edit2_date_return" type="date" required/>
-            <button className="btn btn-primary" name="edit2" type="submit">
-              Create Request
-            </button>
+            {/* Form details */}
           </form>
         ) : (
           <div>
             {!isInvalidEmail && (
               <p>Please log in with your USC email to proceed:</p>
             )}
-            <button className="btn btn-primary" onClick={handleSignIn}>
-              Log in with Google
-            </button>
+            <form className="d-flex flex-column" method="POST">
+              <label htmlFor="edit2_borrowers_email">USC Email Address</label>
+              <input
+                className="form-control mb-2"
+                name="edit2_borrowers_email"
+                type="email"
+                placeholder="e.g. example@usc.edu.ph"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <button className="btn btn-primary" onClick={handleSignIn}>
+                Verify Email
+              </button>
+            </form>
           </div>
         )}
       </div>
     </div>
   );
-}
+};
 
 export default RequestBorrower;
