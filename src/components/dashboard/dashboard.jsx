@@ -6,11 +6,11 @@ import '../../styles/Dashboard.css'
 const Dashboard = () => {
   return (
     <div className="dashboard">
-      <header className="dashboard-header">
-        <div>
-            <h1>Dashboard</h1>
+        <div className='dashboard-header'>
+            <div className='childDivHeader'>
+                <h1>Dashboard</h1>
+            </div>
         </div>
-      </header>
       <div className="dashboard-content">
         <div className="widget">
           <h2>Equipment</h2>

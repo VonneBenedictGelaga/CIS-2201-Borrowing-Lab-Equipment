@@ -1,13 +1,28 @@
 .dashboard {
     width: 100%;
     height: 100vh;
+    
   }
   
+
   .dashboard-header {
-    padding: 20px;
-    background-color: #f0f0f0;
+    position: relative;
+    
+    margin-top: 4px;
+    width: 100%;
+    height: 30%;
+    background-image: url("../images/USChome.jpg");
+    background-size: cover;
+    background-position: center;
   }
   
+  .childDivHeader{
+    position: absolute;
+    top: 50%;
+     left: 5%;
+    
+  }
+
   .dashboard-content {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -21,3 +36,4 @@
     background-color: #fcfbfb;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
+
