@@ -1,5 +1,5 @@
 import React from 'react';
-
+import '../../styles/Dashboard.css'
 
 const Dashboard = () => {
   return (
@@ -9,14 +9,18 @@ const Dashboard = () => {
       </header>
       <div className="dashboard-content">
         <div className="widget">
-          <h2>Widget 1</h2>
+          <h2>Equipment</h2>
           {/* Add content for the first widget */}
         </div>
         <div className="widget">
-          <h2>Widget 2</h2>
+          <h2>Requests</h2>
           {/* Add content for the second widget */}
         </div>
         {/* Add more widgets as needed */}
+        <div className="widget">
+          <h2>Archive</h2>
+          {/* Add content for the first widget */}
+        </div>
       </div>
     </div>
   );

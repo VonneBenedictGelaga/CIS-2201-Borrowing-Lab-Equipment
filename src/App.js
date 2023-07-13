@@ -1,5 +1,5 @@
 import React from 'react';
-import { Login } from "./components/login/login.jsx"
+//import { Login } from "./components/login/login.jsx"
 import Layout from  "./components/layout";
 import Navbar from "./components/navbar"
 import MainPage from "./components/main"
@@ -12,7 +12,7 @@ const App = () => {
     <Layout
       navbar={<Navbar />}
       sidebar={<Sidebar />}
-      main={<MainPage />}
+      main={<Dashboard />}
     />
   );
 };
