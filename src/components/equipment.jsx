@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/layout.css';
-import { getFirestore, collection, addDoc } from 'firebase/firestore'; // Add the missing import
-
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../config/firebase';
 const Equipment = () => {
   const [equipmentData, setEquipmentData] = useState({
     name: '',
@@ -46,7 +46,6 @@ const Equipment = () => {
     }
 
     try {
-      const db = getFirestore();
       const equipmentRef = collection(db, 'Equipments');
 
       await addDoc(equipmentRef, {
@@ -131,34 +130,34 @@ const Equipment = () => {
           </div>
           <div className="row">
             <div className="col">
-                <div className="form-group">
+              <div className="form-group">
                 <label htmlFor="assetCode">Asset Code</label>
                 <input
-                    type="number"
-                    className="form-control"
-                    id="assetCode"
-                    name="assetCode"
-                    value={equipmentData.assetCode}
-                    onChange={handleInputChange}
-                    required
+                  type="number"
+                  className="form-control"
+                  id="assetCode"
+                  name="assetCode"
+                  value={equipmentData.assetCode}
+                  onChange={handleInputChange}
+                  required
                 />
-                </div>
+              </div>
             </div>
             <div className="col">
-                <div className="form-group">
+              <div className="form-group">
                 <label htmlFor="serialNumber">Serial Number</label>
                 <input
-                    type="number"
-                    className="form-control"
-                    id="serialNumber"
-                    name="serialNumber"
-                    value={equipmentData.serialNumber}
-                    onChange={handleInputChange}
-                    required
+                  type="number"
+                  className="form-control"
+                  id="serialNumber"
+                  name="serialNumber"
+                  value={equipmentData.serialNumber}
+                  onChange={handleInputChange}
+                  required
                 />
-                </div>
+              </div>
             </div>
-            </div>
+          </div>
           <div className="form-group">
             <label htmlFor="quantity">Quantity</label>
             <input

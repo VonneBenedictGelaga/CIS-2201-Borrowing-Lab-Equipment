@@ -1,8 +1,4 @@
 {
-<<<<<<< HEAD
-  "dependencies": {
-    "firebase": "^10.0.0"
-=======
   "name": "cis2201",
   "version": "0.1.0",
   "private": true,
@@ -15,6 +11,7 @@
     "firebase": "^10.0.0",
     "nodemailer": "^6.9.3",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.8.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.14.1",
     "react-scripts": "5.0.1",
@@ -43,6 +40,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
->>>>>>> auth
   }
 }

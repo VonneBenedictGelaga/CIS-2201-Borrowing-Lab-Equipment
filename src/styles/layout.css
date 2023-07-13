@@ -1,22 +1,63 @@
 .layout {
   display: grid;
-  grid-template-columns: 200px 1fr; /* Sidebar takes 200px width, main takes the remaining space */
-  grid-template-rows: 60px 1fr; /* Navbar takes 60px height, main takes the remaining space */
-  height: 100vh; /* Adjust height as needed */
 }
 
 .navbar {
-  background-color: #f0f0f0;
-  grid-column: 1 / span 2; /* Navbar spans across both columns */
+  background-color: #24272C;
 }
 
-.sidebar {
-  background-color: #f8f8f8;
-  grid-row: 2 / span 1; /* Sidebar spans 1 row */
+/* Insert Equipment Page */
+
+ .insertEquipment {
+  display: flex;
+  justify-content: flex-end;
+}
+ 
+.insertEquipment.card {
+  background-color: rgba(255, 255, 255, 0.85); 
+  color: black;
+  border: none;
+  box-shadow: none;
+  left: 35%;
+  top: 8%;
+}
+/*
+.insertEquipment .form-group {
+  padding-bottom: 10px;
+} */
+
+/* Display Equipment Page */
+
+.displayAdmin table {
+  color: black;
+  border: none;
+  box-shadow: none;
+  margin-top: 20px; /* Adjust the margin-top value to push the table lower */
 }
 
-.main {
-  background-color: #ffffff;
-  grid-column: 2 / span 1; /* Main content area spans 1 column */
-  grid-row: 2 / span 1; /* Main content area spans 1 row */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+
+.overlay .expanded-card {
+  width: 100%;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.overlay .expanded-card .card-header,
+.overlay .expanded-card .card-body {
+  position: relative;
+  z-index: 1;
+}
+

@@ -1,15 +1,15 @@
 import React from 'react';
-import Layout from  "./components/layout";
-import Navbar from "./components/navbar"
-import MainPage from "./components/main"
-import Sidebar from "./components/sidebar"
+import Layout from './components/layout';
+import Navbar from './components/navbar';
+import Display from './components/display';
+import Equipment from './components/equipment';
 
 const App = () => {
   return (
     <Layout
       navbar={<Navbar />}
-      sidebar={<Sidebar />}
-      main={<MainPage />}
+      display={<Display />}
+      equipment={<Equipment />}
     />
   );
 };
