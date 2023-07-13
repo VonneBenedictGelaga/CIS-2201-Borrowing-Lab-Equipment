@@ -4,6 +4,7 @@ import Layout from  "./components/layout";
 import Navbar from "./components/navbar"
 import MainPage from "./components/main"
 import Sidebar from "./components/sidebar"
+import Dashboard from "./components/dashboard/dashboard.jsx"
 
 const App = () => {
   return (
