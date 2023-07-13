@@ -13,17 +13,22 @@ const Dashboard = () => {
         </div>
       <div className="dashboard-content">
         <div className="widget">
+          <div className='image-container'>
+              <img src="src\images\dashboard images\1642366.png" alt="Requests Image" />
+          </div>
           <h2>Equipment</h2>
-          {/* Add content for the first widget */}
         </div>
         <div className="widget">
+          <div className='image-container'>
+            <img src="src\images\dashboard images\1642366.png" alt="Requests Image" />
+          </div>
           <h2>Requests</h2>
-          {/* Add content for the second widget */}
         </div>
-        {/* Add more widgets as needed */}
         <div className="widget">
+          <div className='image-container'>
+              <img src="src\images\dashboard images\1642366.png" alt="Requests Image" />
+          </div>
           <h2>Archive</h2>
-          {/* Add content for the first widget */}
         </div>
       </div>
     </div>
