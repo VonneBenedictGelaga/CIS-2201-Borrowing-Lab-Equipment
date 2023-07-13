@@ -2,12 +2,12 @@ import React from 'react';
 import '../../styles/Dashboard.css'
 
 
+
 const Dashboard = () => {
   return (
     <div className="dashboard">
       <header className="dashboard-header">
         <div>
-            <img src="../../images/USChome.jpg" alt="USC" />
             <h1>Dashboard</h1>
         </div>
       </header>
