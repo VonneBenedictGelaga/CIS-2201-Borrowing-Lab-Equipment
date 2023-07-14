@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import NavbarSignedOut from './navbar/signedin.jsx';
-import NavbarSignedIn from './navbar/signedout.jsx';
+import NavbarSignedIn from './navbar/signedin.jsx';
+import NavbarSignedOut from './navbar/signedout.jsx';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Navbar = () => {
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(true);
 
   const handleEquipmentsClick = () => {
     // Logic to handle the click event when the "Equipments" button is clicked
@@ -26,7 +27,7 @@ const Navbar = () => {
   };
 
   return (
-    <div>
+    <div className='container-fluid'>
       {isSignedIn ? (
         <NavbarSignedIn
           handleDashboardClick={handleDashboardClick}

@@ -1,10 +1,11 @@
 import React from 'react';
+import RequestSidebar from './request/request-sidebar'
 
 const Sidebar = () => {
   return (
-    <aside>
-      <h1>What is Lorem Ipsum?</h1>
-    </aside>
+    <div style={{border: "1px solid black"}}>
+      <RequestSidebar />
+    </div>
   );
 };
 

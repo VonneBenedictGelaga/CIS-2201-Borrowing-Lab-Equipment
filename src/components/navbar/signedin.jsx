@@ -6,32 +6,30 @@ import { BsBoxArrowRight } from "react-icons/bs";
 const NavbarSignedIn = ({ handleDashboardClick, handleRequestsClick, handleEquipmentsClick, handleSettingsClick, handleSignOutClick }) => {
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div className="container-fluid">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <img src={logo} alt="Logo" width="200" height="40"/>
-            <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">DASHBOARD</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">EQUIPMENTS</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">REQUESTS</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">SETTINGS</a>
-            </li>
-          </ul>
+      <img src={logo} width={200} height={50} alt="DCISM-logo" />
+      <div className="navbar container navbar-dark bg-dark mr-auto" id="navbarSupportedContent">
+        <ul className="navbar-nav mr-auto">
+          <li className="nav-item">
+            <a className="nav-link" href="#">Dashboard</a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="#">Equipments</a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link active" href="#">Requests</a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="#">Settings</a>
+          </li>
+        </ul>
 
-          <ul className="navbar-nav">
+        <ul className="nav navbar-nav navbar-right">
             <li className="nav-item">
               <a className="nav-link" href="#"><BsBoxArrowRight /></a>
             </li>
-          </ul>
+        </ul>
 
-        </div>
-      </nav>
+      </div>
     </>
   );
 };

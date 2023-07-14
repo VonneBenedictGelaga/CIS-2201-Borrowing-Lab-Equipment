@@ -1,12 +1,11 @@
 import React from 'react';
-import '../styles/layout.css';
+// import '../styles/layout.css';
 
-const Layout = ({ navbar, sidebar, main }) => {
+const Layout = ({ navbar, sidebar, main}) => {
   return (
     <div className="layout">
-      <div className="navbar">{navbar}</div>
-      <div className="sidebar">{sidebar}</div>
-      <div className="main">{main}</div>
+      <nav className="navbar navbar-expand-sm navbar-dark bg-dark">{navbar}</nav>
+      <main className="">{main}</main>
     </div>
   );
 };

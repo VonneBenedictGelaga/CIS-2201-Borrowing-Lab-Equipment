@@ -3,15 +3,15 @@ import { Login } from "./components/login/login.jsx"
 import Layout from  "./components/layout";
 import Navbar from "./components/navbar"
 import MainPage from "./components/main"
-import Sidebar from "./components/sidebar"
+
 
 const App = () => {
   return (
     //<div className='App'><Login/></div>
     <Layout
       navbar={<Navbar />}
-      sidebar={<Sidebar />}
       main={<MainPage />}
+      // login={<Login />}
     />
   );
 };
