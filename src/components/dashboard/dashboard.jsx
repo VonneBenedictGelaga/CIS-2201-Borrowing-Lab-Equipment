@@ -14,19 +14,19 @@ const Dashboard = () => {
       <div className="dashboard-content">
         <div className="widget">
           <div className='image-container'>
-              <img src="src\images\dashboard images\1642366.png" alt="Requests Image" />
+              <img src="src\images\dashboard images\Equipment.png" alt="Requests Image" />
           </div>
           <h2>Equipment</h2>
         </div>
         <div className="widget">
           <div className='image-container'>
-            <img src="src\images\dashboard images\1642366.png" alt="Requests Image" />
+            <img src="src\images\dashboard images\Equipment.png" alt="Requests Image" />
           </div>
           <h2>Requests</h2>
         </div>
         <div className="widget">
           <div className='image-container'>
-              <img src="src\images\dashboard images\1642366.png" alt="Requests Image" />
+              <img src="src\images\dashboard images\Equipment.png" alt="Requests Image" />
           </div>
           <h2>Archive</h2>
         </div>
