@@ -39,7 +39,7 @@
 
 .title {
   font-family: "Monsteratt", sans-serif;
-  font-size: 3.75rem;
+  font-size: 3.25rem;
   color: white;
   z-index: 1;
   text-align: left;
@@ -54,9 +54,10 @@
   text-decoration: underline;
 }
 
-/* requestBorrower.js */
 .reqBor_container {
-  right: 5%;
-  margin-top: 6%;
-  z-index: 2;
+  margin-left: 225px;
+}
+
+.homeLOL {
+  margin-top: 60px;
 }

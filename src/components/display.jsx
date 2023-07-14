@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { Pagination, Table } from 'react-bootstrap';
 import '../styles/layout.css';
-import { getFirestore, collection, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 
 const EquipmentList = () => {
   const [equipmentData, setEquipmentData] = useState([]);
   const [selectedEquipment, setSelectedEquipment] = useState(null);
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(8);
 
   useEffect(() => {
     const fetchEquipmentData = async () => {
@@ -62,9 +65,33 @@ const EquipmentList = () => {
     }
   };
 
+  const handleDeleteClick = async (equipment) => {
+    try {
+      const db = getFirestore();
+      const equipmentRef = doc(db, 'Equipments', equipment.id);
+      await deleteDoc(equipmentRef);
+
+      // Remove the equipment from the state
+      const updatedData = equipmentData.filter((item) => item.id !== equipment.id);
+      setEquipmentData(updatedData);
+    } catch (error) {
+      console.log('Error deleting equipment data:', error);
+    }
+  };
+
+  // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentEquipmentData = equipmentData.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(equipmentData.length / itemsPerPage);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="container displayAdmin">
-      <table className="table table-bordered table-striped custom-table">
+      <Table className="table table-bordered table-striped custom-table" striped bordered>
         <thead className="thead-dark">
           <tr>
             <th>Equipment Name</th>
@@ -73,10 +100,11 @@ const EquipmentList = () => {
             <th>Serial Number</th>
             <th>Quantity</th>
             <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          {equipmentData.map((equipment, index) => (
+          {currentEquipmentData.map((equipment, index) => (
             <tr key={index}>
               <td>{equipment.equipName}</td>
               <td>{equipment.description}</td>
@@ -88,10 +116,43 @@ const EquipmentList = () => {
                   Update
                 </button>
               </td>
+              <td>
+                <button className="btn btn-danger" onClick={() => handleDeleteClick(equipment)}>
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
+
+      <Pagination>
+        <Pagination.Prev
+          onClick={() => {
+            if (currentPage > 1) {
+              paginate(currentPage - 1);
+            }
+          }}
+          disabled={currentPage === 1}
+        />
+        {Array.from({ length: totalPages }, (_, i) => (
+          <Pagination.Item
+            key={i + 1}
+            active={i + 1 === currentPage}
+            onClick={() => paginate(i + 1)}
+          >
+            {i + 1}
+          </Pagination.Item>
+        ))}
+        <Pagination.Next
+          onClick={() => {
+            if (currentPage < totalPages) {
+              paginate(currentPage + 1);
+            }
+          }}
+          disabled={currentPage === totalPages}
+        />
+      </Pagination>
 
       {selectedEquipment && (
         <div className="overlay">
@@ -108,7 +169,7 @@ const EquipmentList = () => {
                 </div>
               </div>
               <div className="card-body">
-              {updateSuccess && (
+                {updateSuccess && (
                   <div className="alert alert-success" role="alert">
                     Form data saved successfully!
                   </div>
@@ -134,7 +195,7 @@ const EquipmentList = () => {
                       rows="2"
                     ></textarea>
                   </div>
-                  <div className="form-row">
+                  <div className="row">
                     <div className="form-group col-md-6">
                       <label htmlFor="assetCode">Asset Code</label>
                       <input

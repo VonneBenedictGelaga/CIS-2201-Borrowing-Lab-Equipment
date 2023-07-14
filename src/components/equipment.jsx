@@ -55,6 +55,7 @@ const Equipment = () => {
         equipName: equipmentData.name,
         serialNum: equipmentData.serialNumber,
         equipQuantity: equipmentData.quantity,
+        status: 'functional',  
       });
 
       console.log('Form data saved to Firestore');
@@ -129,7 +130,7 @@ const Equipment = () => {
             ></textarea>
           </div>
           <div className="row">
-            <div className="col">
+            <div className="col-6">
               <div className="form-group">
                 <label htmlFor="assetCode">Asset Code</label>
                 <input
@@ -143,7 +144,7 @@ const Equipment = () => {
                 />
               </div>
             </div>
-            <div className="col">
+            <div className="col-6">
               <div className="form-group">
                 <label htmlFor="serialNumber">Serial Number</label>
                 <input
@@ -169,7 +170,7 @@ const Equipment = () => {
               onChange={handleInputChange}
               required
             />
-          </div>
+          </div><br></br>
           <button type="submit" className="btn btn-primary">
             Submit
           </button>
