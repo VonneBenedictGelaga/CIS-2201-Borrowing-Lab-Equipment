@@ -1,7 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { Login } from '../login/login.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const NavbarSignedOut = ({ handleEquipmentsClick, children  }) => {
+  const [showLogin, setShowLogin] = useState(false);
+
+  const handleSignInClick = () => {
+    setShowLogin(true);
+  };
+
   return (
     <div>
       {/* Bootstrap Navbar */}
@@ -26,6 +33,9 @@ const NavbarSignedOut = ({ handleEquipmentsClick, children  }) => {
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="#">Equipments</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link"  href="#" onClick={handleSignInClick}>Sign In</a>
               </li>
             </ul>
           </div>
