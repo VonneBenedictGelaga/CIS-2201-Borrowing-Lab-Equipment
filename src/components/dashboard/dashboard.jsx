@@ -2,7 +2,7 @@ import React from 'react';
 import '../../styles/Dashboard.css'
 import equipmentImage from '../../images/dashboard images/equipment-icon.png';
 import requestImage from '../../images/dashboard images/request-icon.png';
-import archiveImage from '../../images/dashboard images/archive.png';
+import archiveImage from '../../images/dashboard images/archive-icon.png';
 
 const Dashboard = () => {
 
@@ -19,19 +19,19 @@ const Dashboard = () => {
         <div className="image-container">
           <img src={equipmentImage} alt="Equipment" />
         </div>
-          <h2>Equipment</h2>
+          <h2 className='hover-text'>Equipments</h2>
         </div>
         <div className="widget">
         <div className="image-container">
           <img src={requestImage} alt="Request Image" />
         </div>
-          <h2>Requests</h2>
+          <h2 className='hover-text'>Requests</h2>
         </div>
         <div className="widget">
         <div className="image-container">
           <img src={archiveImage} alt="Archive Image" />
         </div>
-          <h2>Archive</h2>
+          <h2 className='hover-text'>Archive</h2>
         </div>
       </div>
     </div>

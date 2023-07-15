@@ -1,15 +1,28 @@
 .dashboard {
+  animation: transitionIn 0.8s;
   width: 100%;
   height: 90vh;
   box-sizing: border-box;
+}
+
+@keyframes transitionIn {
+  from{
+    opacity: 0;
+    transform: rotateX(-10deg);
+  }
+  to{
+    opacity: 1;
+    transform: rotateX(0);
+  }
+  
 }
 
 .dashboard-header {
   position: relative;
   width: 100%;
   height: 40vh;
-  background-color: grey;
-  background-image: url("../images/USChome.jpg");
+  background-color: #000080;
+ /* background-image: url("../images/USChome.jpg");*/
   background-blend-mode: multiply;
   background-size: cover;
   background-position: center;
@@ -54,6 +67,7 @@
   transition: all 0.3s ease;
   cursor: pointer;
   margin-top: 30px;
+  height: 350px;
   width: 500px;
   max-width: 100%;
   border-radius: 10px;
@@ -76,6 +90,17 @@
   transform: scale(1.05);
 }
 
+.hover-text {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.widget:hover .hover-text {
+  opacity: 1;
+  visibility: visible;
+}
+
 @media (max-width: 768px) {
   .dashboard-content {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -85,7 +110,10 @@
     height: 20vh;
   }
   .dashboard-header h1{
-    font-size: 40px;
+    font-size: 60px;
+  }
+  .dashboard-header h2{
+    font-size: 10px;
   }
 
   .widget {
