@@ -1,9 +1,13 @@
 import React from 'react';
 import '../../styles/Dashboard.css'
-
-
+import equipmentImage from '../../images/dashboard images/equipment-icon.png';
+import requestImage from '../../images/dashboard images/request-icon.png';
+import archiveImage from '../../images/dashboard images/archive.png';
 
 const Dashboard = () => {
+
+
+
   return (
     <div className="dashboard">
         <div className='dashboard-header'>
@@ -13,12 +17,21 @@ const Dashboard = () => {
         </div>
       <div className="dashboard-content">
         <div className="widget">
+        <div className="image-container">
+          <img src={equipmentImage} alt="Equipment" />
+        </div>
           <h2>Equipment</h2>
         </div>
         <div className="widget">
+        <div className="image-container">
+          <img src={requestImage} alt="Request Image" />
+        </div>
           <h2>Requests</h2>
         </div>
         <div className="widget">
+        <div className="image-container">
+          <img src={archiveImage} alt="Archive Image" />
+        </div>
           <h2>Archive</h2>
         </div>
       </div>
