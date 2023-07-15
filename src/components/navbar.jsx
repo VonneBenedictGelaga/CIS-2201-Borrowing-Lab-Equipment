@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import NavbarSignedOut from './navbar/signedin.jsx';
 import NavbarSignedIn from './navbar/signedout.jsx';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Navbar = () => {
   const [isSignedIn, setIsSignedIn] = useState(false);

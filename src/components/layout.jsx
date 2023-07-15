@@ -1,12 +1,13 @@
 import React from 'react';
 import '../styles/layout.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const Layout = ({ navbar, sidebar, main }) => {
+const Layout = ({ navbar, display, home }) => {
   return (
     <div className="layout">
       <div className="navbar">{navbar}</div>
-      <div className="sidebar">{sidebar}</div>
-      <div className="main">{main}</div>
+      {/* <div className="display">{display}</div>  */}
+      <div className="home">{home}</div> 
     </div>
   );
 };
