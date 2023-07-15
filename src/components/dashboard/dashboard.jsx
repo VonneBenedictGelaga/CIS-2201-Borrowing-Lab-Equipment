@@ -6,13 +6,12 @@ import archiveImage from '../../images/dashboard images/archive.png';
 
 const Dashboard = () => {
 
-
-
   return (
     <div className="dashboard">
         <div className='dashboard-header'>
             <div className='childDivHeader'>
                 <h1>Dashboard</h1>
+                <h2>Welcome to Your Dashboard: Where Data Comes Alive and Possibilities Begin</h2>
             </div>
         </div>
       <div className="dashboard-content">
