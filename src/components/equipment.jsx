@@ -11,7 +11,8 @@ const Equipment = () => {
     serialNumber: '',
     quantity: '',
     brand: '',
-    file: null,
+    file: 'null',
+    equipmentType: 'others', 
   });
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [formError, setFormError] = useState('');
@@ -28,8 +29,19 @@ const Equipment = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEquipmentData((prevData) => ({ ...prevData, [name]: value }));
-  };
+  
+    if (name === 'equipmentType' && value !== 'others') {
+      setEquipmentData((prevData) => ({
+        ...prevData,
+        equipmentType: value,
+      }));
+    } else {
+      setEquipmentData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };  
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -38,18 +50,18 @@ const Equipment = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const requiredFields = ['name', 'description', 'assetCode', 'serialNumber', 'quantity', 'brand'];
     const isEmpty = requiredFields.some((field) => !equipmentData[field]);
-
+  
     if (isEmpty) {
       setFormError('Please fill in all required fields.');
       return;
     }
-
+  
     try {
       const equipmentRef = collection(db, 'Equipments');
-
+  
       await addDoc(equipmentRef, {
         assetCode: equipmentData.assetCode,
         description: equipmentData.description,
@@ -61,7 +73,7 @@ const Equipment = () => {
         equipType: equipmentData.equipmentType,
         status: 'functional',
       });
-
+  
       console.log('Form data saved to Firestore');
       // Reset the form data
       setEquipmentData({
@@ -73,14 +85,18 @@ const Equipment = () => {
         brand: '',
         file: null,
       });
-
+  
       // Show success alert and clear form error
-      setShowSuccessAlert(true);
       setFormError('');
+      setShowSuccessAlert(true); // Set showSuccessAlert to true
+  
+      setTimeout(() => {
+        setShowSuccessAlert(false); // Reset showSuccessAlert after a certain duration
+      }, 5000);
     } catch (error) {
       console.error('Error saving form data:', error);
     }
-  };
+  };  
 
   const equipmentTypeOptions = [
     { label: 'Others', value: 'others' },

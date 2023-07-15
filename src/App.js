@@ -5,6 +5,10 @@ import MainPage from "./components/main"
 import Sidebar from "./components/sidebar"
 import Display from "./components/display"
 import Equipment from './components/equipment'
+import DisplayBorrower from './components/displayborrower'
+import ReqBorrower from './components/reqborrower'
+import Request from './components/request'
+
 
 import Login from './components/login/login';
 
@@ -14,7 +18,8 @@ const App = () => {
     <Layout
       navbar={<Navbar />}
       display={<Equipment />}
-      home={<Display />}
+      // equipmentborrower={<EquipmentBorrower />}
+      reqborrower={<DisplayBorrower />}
     />
   );
 };
