@@ -9,23 +9,25 @@
     position: relative;
     width: 100%;
     height: 40%;
-    background-image: url("../images/USChome.jpg");
+    background-image:url("../images/USChome.jpg");
+    background-color: grey;
+    background-blend-mode: multiply;
+    
     background-size: cover;
     background-position: center;
-    background-blend-mode: darken;
 
   }
   
   .childDivHeader{
     position: absolute;
     top: 50%;
-     left: 5%;
+    left: 5%;
     
   }
   .childDivHeader h1{
     font-family: "Monsteratt", sans-serif;
     font-size: 40px;
-    color: rgb(0, 0, 0);
+    color: rgba(229, 227, 227,277);
   }
   
 
