@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../styles/layout.css';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
+
 const Equipment = () => {
   const [equipmentData, setEquipmentData] = useState({
     name: '',
@@ -9,6 +10,7 @@ const Equipment = () => {
     assetCode: '',
     serialNumber: '',
     quantity: '',
+    brand: '',
     file: null,
   });
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -37,7 +39,7 @@ const Equipment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const requiredFields = ['name', 'description', 'assetCode', 'serialNumber', 'quantity'];
+    const requiredFields = ['name', 'description', 'assetCode', 'serialNumber', 'quantity', 'brand'];
     const isEmpty = requiredFields.some((field) => !equipmentData[field]);
 
     if (isEmpty) {
@@ -55,7 +57,9 @@ const Equipment = () => {
         equipName: equipmentData.name,
         serialNum: equipmentData.serialNumber,
         equipQuantity: equipmentData.quantity,
-        status: 'functional',  
+        brand: equipmentData.brand,
+        equipType: equipmentData.equipmentType,
+        status: 'functional',
       });
 
       console.log('Form data saved to Firestore');
@@ -66,6 +70,7 @@ const Equipment = () => {
         assetCode: '',
         serialNumber: '',
         quantity: '',
+        brand: '',
         file: null,
       });
 
@@ -76,6 +81,15 @@ const Equipment = () => {
       console.error('Error saving form data:', error);
     }
   };
+
+  const equipmentTypeOptions = [
+    { label: 'Others', value: 'others' },
+    { label: 'Computers', value: 'computers' },
+    { label: 'Peripherals', value: 'peripherals' },
+    { label: 'Servers', value: 'servers' },
+    { label: 'Power Equipment', value: 'power-equipment' },
+    { label: 'Networking Equipment', value: 'networking-equipment' },
+  ];
 
   return (
     <div className="card col-4 insertEquipment">
@@ -96,7 +110,7 @@ const Equipment = () => {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="file">Insert Equipment Photo</label>
-            <br></br>
+            <br />
             <input
               type="file"
               className="form-control-file"
@@ -126,6 +140,8 @@ const Equipment = () => {
               name="description"
               value={equipmentData.description}
               onChange={handleInputChange}
+              rows={2}
+              style={{ resize: 'none' }} // Set the resize property to "none"
               required
             ></textarea>
           </div>
@@ -159,18 +175,50 @@ const Equipment = () => {
               </div>
             </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="quantity">Quantity</label>
-            <input
-              type="number"
-              className="form-control"
-              id="quantity"
-              name="quantity"
-              value={equipmentData.quantity}
-              onChange={handleInputChange}
-              required
-            />
-          </div><br></br>
+          <div className="row">
+            <div className="col-4">
+              <label htmlFor="quantity">Quantity</label>
+              <input
+                type="number"
+                className="form-control"
+                id="quantity"
+                name="quantity"
+                value={equipmentData.quantity}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="col-4">
+              <label htmlFor="brand">Brand</label>
+              <input
+                type="text"
+                className="form-control"
+                id="brand"
+                name="brand"
+                value={equipmentData.brand}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="col-4">
+              <label htmlFor="equipmentType">Equipment Type</label>
+              <select
+                className="form-control"
+                id="equipmentType"
+                name="equipmentType"
+                value={equipmentData.equipmentType}
+                onChange={handleInputChange}
+                required
+              >
+                {equipmentTypeOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <br />
           <button type="submit" className="btn btn-primary">
             Submit
           </button>

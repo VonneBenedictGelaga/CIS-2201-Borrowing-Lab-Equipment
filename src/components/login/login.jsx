@@ -22,3 +22,5 @@ export const Login = () => {
     <button onClick={signIn}>Sign in</button>
   </div>
 }
+
+export default Login;
