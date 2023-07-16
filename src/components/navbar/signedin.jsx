@@ -1,13 +1,13 @@
 import React from 'react';
 import './navbar.css'
-import logo from '../../images/DCISM.jpg'
+import logo from '../../images/DCISM.png'
 import { BsBoxArrowRight } from "react-icons/bs";
 
 const NavbarSignedIn = ({ handleDashboardClick, handleRequestsClick, handleEquipmentsClick, handleSettingsClick, handleSignOutClick }) => {
   return (
     <>
-      <img src={logo} width={200} height={50} alt="DCISM-logo" />
-      <div className="navbar container navbar-dark bg-dark mr-auto" id="navbarSupportedContent">
+      <img src={logo} width={240} height={40} alt="DCISM-logo" />
+      <div className="navbar container mr-auto text-uppercase" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
           <li className="nav-item">
             <a className="nav-link" href="#">Dashboard</a>
@@ -15,8 +15,8 @@ const NavbarSignedIn = ({ handleDashboardClick, handleRequestsClick, handleEquip
           <li className="nav-item">
             <a className="nav-link" href="#">Equipments</a>
           </li>
-          <li className="nav-item">
-            <a className="nav-link active" href="#">Requests</a>
+          <li className="nav-item active">
+            <a className="nav-link" href="#">Requests</a>
           </li>
           <li className="nav-item">
             <a className="nav-link" href="#">Settings</a>
