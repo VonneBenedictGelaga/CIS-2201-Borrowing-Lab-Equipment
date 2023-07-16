@@ -4,6 +4,7 @@ import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 const RequestList = () => {
   const [requestData, setRequestData] = useState([]);
+  const [selectedEquipment, setSelectedEquipment] = useState(null);
 
   useEffect(() => {
     const fetchRequestData = async () => {
@@ -21,6 +22,10 @@ const RequestList = () => {
     fetchRequestData();
   }, []);
 
+  const handleViewDetails = (equipment) => {
+    setSelectedEquipment(equipment);
+  };
+
   return (
     <div className="container displayAdmin">
       <table className="table table-bordered table-striped custom-table">
@@ -32,6 +37,7 @@ const RequestList = () => {
             <th>Date Returned</th>
             <th>Reason Borrowed</th>
             <th>Status</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -43,10 +49,62 @@ const RequestList = () => {
               <td>{request.dateReturned}</td>
               <td>{request.reasonBorrowed}</td>
               <td>{request.status}</td>
+              <td>
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={() => handleViewDetails(request.equipment)}
+                >
+                  View
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {selectedEquipment && (
+        <div className="overlay">
+          <div className="expanded-card">
+            <div className="card col-4 insertEquipment">
+              <div className="card-header">
+                <div className="row">
+                  <div className="col-11">
+                    <h5 className="card-title">EQUIPMENT DETAILS</h5>
+                  </div>
+                  <div className="col-1 text-right">
+                    <button
+                      className="btn btn-close"
+                      onClick={() => setSelectedEquipment(null)}
+                    ></button>
+                  </div>
+                </div>
+              </div>
+              <div className="card-body">
+                <table className="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Equipment ID</th>
+                      <th>Quantity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {selectedEquipment.map((equipment, index) => (
+                      <tr key={index}>
+                        <td>{equipment.equipmentId}</td>
+                        <td>{equipment.quantity}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <p>Reason Borrowed: {selectedEquipment.reasonBorrowed}</p>
+                <p>Status 1: {selectedEquipment.status1}</p>
+                <p>Status 2: {selectedEquipment.status2}</p>
+                <p>Status 3: {selectedEquipment.status3}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

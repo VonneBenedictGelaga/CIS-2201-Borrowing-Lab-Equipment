@@ -9,6 +9,7 @@ import {
   query,
   where,
   addDoc,
+  setDoc,
 } from 'firebase/firestore';
 
 const DisplayBorrower = () => {
@@ -105,30 +106,51 @@ const DisplayBorrower = () => {
   };
 
   const handleSelectEquipmentConfirm = async () => {
-    // Create a new selected equipment object
     const selectedEquipmentInfo = {
       id: selectedEquipment.id,
+      name: selectedEquipment.equipName,
+      brand: selectedEquipment.brand,
       quantity: selectedQuantity,
     };
-
-    // Add the new selected equipment to the existing selected info array
-    setSelectedInfo((prevSelectedInfo) => [...prevSelectedInfo, selectedEquipmentInfo]);
-
-    // Store the equipment ID and quantity in Firebase
+  
     try {
       const db = getFirestore();
       const queryRef = collection(db, 'Query');
-      await addDoc(queryRef, { equipmentId: selectedEquipment.id, quantity: selectedQuantity });
+  
+      // Check if the selected equipment already exists in the 'Query' collection
+      const existingEquipmentQuery = query(queryRef, where('equipmentId', '==', selectedEquipment.id));
+      const existingEquipmentSnapshot = await getDocs(existingEquipmentQuery);
+  
+      if (existingEquipmentSnapshot.empty) {
+        // If the selected equipment doesn't exist, add it to the 'Query' collection
+        await addDoc(queryRef, {
+          equipmentId: selectedEquipment.id,
+          equipName: selectedEquipment.equipName,
+          brand: selectedEquipment.brand,
+          quantity: selectedQuantity,
+        });
+      } else {
+        // If the selected equipment already exists, update the existing document
+        const existingEquipmentDoc = existingEquipmentSnapshot.docs[0];
+        await setDoc(existingEquipmentDoc.ref, {
+          equipmentId: selectedEquipment.id,
+          equipName: selectedEquipment.equipName,
+          brand: selectedEquipment.brand,
+          quantity: selectedQuantity,
+        });
+      }
+  
       console.log('Equipment stored in Firebase successfully!');
     } catch (error) {
       console.log('Error storing equipment in Firebase:', error);
     }
-
+  
     // Reset selected equipment and quantity
     setSelectedEquipment(null);
     setSelectedQuantity(1);
   };
-
+  
+  
   return (
     <div className="container displayAdmin">
       <Table className="table table-bordered table-striped custom-table" striped bordered>
@@ -351,3 +373,4 @@ const DisplayBorrower = () => {
 };
 
 export default DisplayBorrower;
+
