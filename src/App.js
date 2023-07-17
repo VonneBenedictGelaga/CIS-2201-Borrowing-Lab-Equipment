@@ -5,8 +5,13 @@ import MainPage from "./components/main"
 import Sidebar from "./components/sidebar"
 import Display from "./components/display"
 import Equipment from './components/equipment'
+import DisplayBorrower from './components/displayborrower'
+import ReqBorrower from './components/reqborrower'
+import Request from './components/request'
+import AccSettings from './components/accsettings'
 
 import Login from './components/login/login';
+import RequestBorrower from './components/reqborrower'
 
 const App = () => {
   return (
@@ -14,7 +19,8 @@ const App = () => {
     <Layout
       navbar={<Navbar />}
       display={<Equipment />}
-      home={<Display />}
+      // equipmentborrower={<EquipmentBorrower />}
+      reqborrower={<ReqBorrower />}
     />
   );
 };
