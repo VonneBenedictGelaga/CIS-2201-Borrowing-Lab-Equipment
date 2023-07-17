@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/layout.css';
 import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { db } from '../../config/firebase';
 
 const Equipment = () => {
   const [equipmentData, setEquipmentData] = useState({

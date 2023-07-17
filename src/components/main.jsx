@@ -1,11 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
+import { Dashboard } from './dashboard/dashboard.jsx';
+import { Home } from './landing/home.jsx';
+import { Login } from './login/login.jsx';
+import  RequestBorrower  from './request/reqborrower.jsx';
+
+
+const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+});
 
 const MainPage = () => {
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsSignedIn(true);
+      } else {
+        setIsSignedIn(false);
+      }
+    });
+
+    // Clean up the subscription when the component unmounts
+    return () => unsubscribe();
+  }, []);
+
+  const handleSignInClick = () => {
+    setShowLogin(true);
+  };
+
   return (
     <main>
-      <p>
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-      </p>
+          {isSignedIn ? (
+            <Dashboard />
+          ) : showLogin ? (
+            <Login />
+          ) : (
+            <div style={{ display: 'flex' }}>
+            <div style={{ flex: '1' }}>
+              <Home handleSignInClick={handleSignInClick} />
+            </div>
+            <div style={{ flex: '1' }}>
+              <RequestBorrower />
+            </div>
+          </div>
+          )}
+        
     </main>
   );
 };

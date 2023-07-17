@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/layout.css';
+import '../../styles/layout.css';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 const RequestList = () => {

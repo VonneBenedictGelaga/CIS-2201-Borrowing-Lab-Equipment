@@ -1,9 +1,22 @@
 import React from 'react';
-import './navbar.css'
-import logo from '../../images/DCISM.jpg'
+import { signOut } from "firebase/auth";
+
+import { auth,} from "../../config/firebase.js";
+import './navbar.css';
+import logo from '../../images/DCISM.jpg';
 import { BsBoxArrowRight } from "react-icons/bs";
 
 const NavbarSignedIn = ({ handleDashboardClick, handleRequestsClick, handleEquipmentsClick, handleSettingsClick, handleSignOutClick }) => {
+  function Logout(){
+    signOut(auth)
+    .then(() => {
+      console.log("User signed out successfully");
+    })
+    .catch((error) => {
+      console.error("Error signing out:", error);
+    });
+  }
+  
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -26,7 +39,7 @@ const NavbarSignedIn = ({ handleDashboardClick, handleRequestsClick, handleEquip
 
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link" href="#"><BsBoxArrowRight /></a>
+              <a className="nav-link" onClick={Logout}><BsBoxArrowRight /></a>
             </li>
           </ul>
 

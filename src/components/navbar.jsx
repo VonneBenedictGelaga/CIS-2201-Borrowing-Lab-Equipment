@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
-import NavbarSignedOut from './navbar/signedin.jsx';
-import NavbarSignedIn from './navbar/signedout.jsx';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState, useEffect } from 'react';
+import { auth } from '../config/firebase.js'
+import NavbarSignedIn from './navbar/signedin.jsx';
+import NavbarSignedOut from './navbar/signedout.jsx';
 
-const Navbar = () => {
+const Navbar = ({}) => {
   const [isSignedIn, setIsSignedIn] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsSignedIn(user ? true : false);
+    });
+  
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const handleEquipmentsClick = () => {
     // Logic to handle the click event when the "Equipments" button is clicked
@@ -27,7 +37,7 @@ const Navbar = () => {
   };
 
   return (
-    <div>
+    <div className='container-fluid' >
       {isSignedIn ? (
         <NavbarSignedIn
           handleDashboardClick={handleDashboardClick}
