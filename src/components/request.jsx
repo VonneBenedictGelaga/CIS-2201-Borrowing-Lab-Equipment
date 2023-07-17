@@ -52,7 +52,7 @@ const RequestList = () => {
               <td>
                 <button
                   className="btn btn-primary btn-sm"
-                  onClick={() => handleViewDetails(request.equipment)}
+                  onClick={() => handleViewDetails(request)}
                 >
                   View
                 </button>
@@ -88,7 +88,7 @@ const RequestList = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {selectedEquipment.map((equipment, index) => (
+                    {selectedEquipment.equipment.map((equipment, index) => (
                       <tr key={index}>
                         <td>{equipment.equipmentId}</td>
                         <td>{equipment.quantity}</td>
@@ -96,7 +96,16 @@ const RequestList = () => {
                     ))}
                   </tbody>
                 </table>
-                <p>Reason Borrowed: {selectedEquipment.reasonBorrowed}</p>
+                <div className="form-group">
+                  <label htmlFor="reasonBorrowed">Reason Borrowed:</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="reasonBorrowed"
+                      value={selectedEquipment.reasonBorrowed}
+                      readOnly
+                    />
+                </div>
                 <p>Status 1: {selectedEquipment.status1}</p>
                 <p>Status 2: {selectedEquipment.status2}</p>
                 <p>Status 3: {selectedEquipment.status3}</p>
