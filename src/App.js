@@ -18,9 +18,7 @@ const App = () => {
     //<div className='App'><Login/></div>
     <Layout
       navbar={<Navbar />}
-      display={<Equipment />}
-      // equipmentborrower={<EquipmentBorrower />}
-      reqborrower={<ReqBorrower />}
+      reqborrower={<Request />}
     />
   );
 };
