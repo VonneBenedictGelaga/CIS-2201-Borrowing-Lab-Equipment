@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Pagination, Table } from 'react-bootstrap';
+import { Pagination, Table, Dropdown } from 'react-bootstrap';
 import '../styles/layout.css';
-import { getFirestore, collection, getDocs, updateDoc, doc, deleteDoc } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+  deleteDoc,
+  query,
+  where,
+} from 'firebase/firestore';
 
 const EquipmentList = () => {
   const [equipmentData, setEquipmentData] = useState([]);
@@ -9,13 +18,22 @@ const EquipmentList = () => {
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
+  const [selectedEquipType, setSelectedEquipType] = useState('default');
 
   useEffect(() => {
     const fetchEquipmentData = async () => {
       try {
         const db = getFirestore();
         const equipmentRef = collection(db, 'Equipments');
-        const equipmentSnapshot = await getDocs(equipmentRef);
+        let queryRef;
+
+        if (selectedEquipType === 'default') {
+          queryRef = equipmentRef;
+        } else {
+          queryRef = query(equipmentRef, where('equipType', '==', selectedEquipType));
+        }
+
+        const equipmentSnapshot = await getDocs(queryRef);
         const equipmentList = equipmentSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
         setEquipmentData(equipmentList);
       } catch (error) {
@@ -24,7 +42,7 @@ const EquipmentList = () => {
     };
 
     fetchEquipmentData();
-  }, []);
+  }, [selectedEquipType]);
 
   const handleUpdateClick = (equipment) => {
     setSelectedEquipment(equipment);
@@ -44,6 +62,8 @@ const EquipmentList = () => {
       assetCode: event.target.elements.assetCode.value,
       serialNum: event.target.elements.serialNumber.value,
       equipQuantity: event.target.elements.quantity.value,
+      brand: event.target.elements.brand.value,
+      equipType: event.target.elements.equipmentType.value,
     };
 
     try {
@@ -89,13 +109,28 @@ const EquipmentList = () => {
     setCurrentPage(pageNumber);
   };
 
+  const handleEquipTypeSelect = (equipType) => {
+    setSelectedEquipType(equipType);
+  };
+
+  const equipmentTypeOptions = [
+    { label: 'Default', value: 'default' },
+    { label: 'Computers', value: 'computers' },
+    { label: 'Peripherals', value: 'peripherals' },
+    { label: 'Servers', value: 'servers' },
+    { label: 'Power Equipment', value: 'power-equipment' },
+    { label: 'Networking Equipment', value: 'networking-equipment' },
+    { label: 'Others', value: 'others' },
+  ];
+
   return (
     <div className="container displayAdmin">
       <Table className="table table-bordered table-striped custom-table" striped bordered>
         <thead className="thead-dark">
           <tr>
             <th>Equipment Name</th>
-            <th>Description</th>
+            <th>Brand</th>
+            <th>Equipment Type</th>
             <th>Asset Code</th>
             <th>Serial Number</th>
             <th>Quantity</th>
@@ -107,7 +142,8 @@ const EquipmentList = () => {
           {currentEquipmentData.map((equipment, index) => (
             <tr key={index}>
               <td>{equipment.equipName}</td>
-              <td>{equipment.description}</td>
+              <td>{equipment.brand}</td>
+              <td>{equipment.equipType}</td>
               <td>{equipment.assetCode}</td>
               <td>{equipment.serialNum}</td>
               <td>{equipment.equipQuantity}</td>
@@ -126,33 +162,51 @@ const EquipmentList = () => {
         </tbody>
       </Table>
 
-      <Pagination>
-        <Pagination.Prev
-          onClick={() => {
-            if (currentPage > 1) {
-              paginate(currentPage - 1);
-            }
-          }}
-          disabled={currentPage === 1}
-        />
-        {Array.from({ length: totalPages }, (_, i) => (
-          <Pagination.Item
-            key={i + 1}
-            active={i + 1 === currentPage}
-            onClick={() => paginate(i + 1)}
-          >
-            {i + 1}
-          </Pagination.Item>
-        ))}
-        <Pagination.Next
-          onClick={() => {
-            if (currentPage < totalPages) {
-              paginate(currentPage + 1);
-            }
-          }}
-          disabled={currentPage === totalPages}
-        />
-      </Pagination>
+      <div className="row">
+        <div className="col-md-4">
+          <Pagination>
+            <Pagination.Prev
+              onClick={() => {
+                if (currentPage > 1) {
+                  paginate(currentPage - 1);
+                }
+              }}
+              disabled={currentPage === 1}
+            />
+            {Array.from({ length: totalPages }, (_, i) => (
+              <Pagination.Item
+                key={i + 1}
+                active={i + 1 === currentPage}
+                onClick={() => paginate(i + 1)}
+              >
+                {i + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next
+              onClick={() => {
+                if (currentPage < totalPages) {
+                  paginate(currentPage + 1);
+                }
+              }}
+              disabled={currentPage === totalPages}
+            />
+          </Pagination>
+        </div>
+        <div className="col-md-4">
+          <Dropdown onSelect={handleEquipTypeSelect}>
+            <Dropdown.Toggle variant="secondary" id="dropdown-equipType">
+              {selectedEquipType === 'default' ? 'Default' : selectedEquipType}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {equipmentTypeOptions.map((option) => (
+                <Dropdown.Item key={option.value} eventKey={option.value}>
+                  {option.label}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+      </div>
 
       {selectedEquipment && (
         <div className="overlay">
@@ -217,16 +271,43 @@ const EquipmentList = () => {
                       />
                     </div>
                   </div>
-                  <div className="form-group">
-                    <label htmlFor="quantity">Quantity</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="quantity"
-                      defaultValue={selectedEquipment.equipQuantity}
-                      placeholder="Enter new quantity"
-                    />
-                  </div><br></br>
+                  <div className="row">
+                    <div className="form-group col-md-4">
+                      <label htmlFor="quantity">Quantity</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="quantity"
+                        defaultValue={selectedEquipment.equipQuantity}
+                        placeholder="Enter new quantity"
+                      />
+                    </div>
+                    <div className="form-group col-md-4">
+                      <label htmlFor="brand">Brand</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="brand"
+                        defaultValue={selectedEquipment.brand}
+                        placeholder="Enter new brand"
+                      />
+                    </div>
+                    <div className="form-group col-md-4">
+                      <label htmlFor="equipmentType">Equipment Type</label>
+                      <select
+                        className="form-control"
+                        id="equipmentType"
+                        defaultValue={selectedEquipment.equipType}
+                      >
+                        {equipmentTypeOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <br />
                   <button type="submit" className="btn btn-primary">
                     Update
                   </button>

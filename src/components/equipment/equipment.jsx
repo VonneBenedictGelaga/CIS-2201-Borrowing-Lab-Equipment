@@ -11,7 +11,7 @@ const Equipment = () => {
     serialNumber: '',
     quantity: '',
     brand: '',
-    file: null,
+    equipmentType: 'others',
   });
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [formError, setFormError] = useState('');
@@ -28,12 +28,18 @@ const Equipment = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEquipmentData((prevData) => ({ ...prevData, [name]: value }));
-  };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setEquipmentData((prevData) => ({ ...prevData, file }));
+    if (name === 'equipmentType' && value !== 'others') {
+      setEquipmentData((prevData) => ({
+        ...prevData,
+        equipmentType: value,
+      }));
+    } else {
+      setEquipmentData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -47,19 +53,23 @@ const Equipment = () => {
       return;
     }
 
+    if (equipmentData.quantity <= 0) {
+      setFormError('Quantity must be greater than zero.');
+      return;
+    }
+
     try {
       const equipmentRef = collection(db, 'Equipments');
 
       await addDoc(equipmentRef, {
         assetCode: equipmentData.assetCode,
         description: equipmentData.description,
-        equipPhotoPath: equipmentData.file.name,
         equipName: equipmentData.name,
         serialNum: equipmentData.serialNumber,
         equipQuantity: equipmentData.quantity,
         brand: equipmentData.brand,
         equipType: equipmentData.equipmentType,
-        status: 'functional',
+        status: 'available',
       });
 
       console.log('Form data saved to Firestore');
@@ -71,12 +81,15 @@ const Equipment = () => {
         serialNumber: '',
         quantity: '',
         brand: '',
-        file: null,
       });
 
       // Show success alert and clear form error
-      setShowSuccessAlert(true);
       setFormError('');
+      setShowSuccessAlert(true); // Set showSuccessAlert to true
+
+      setTimeout(() => {
+        setShowSuccessAlert(false); // Reset showSuccessAlert after a certain duration
+      }, 5000);
     } catch (error) {
       console.error('Error saving form data:', error);
     }
@@ -108,18 +121,6 @@ const Equipment = () => {
           </div>
         )}
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="file">Insert Equipment Photo</label>
-            <br />
-            <input
-              type="file"
-              className="form-control-file"
-              id="file"
-              name="file"
-              onChange={handleFileChange}
-              required
-            />
-          </div>
           <div className="form-group">
             <label htmlFor="name">Equipment Name</label>
             <input
@@ -176,7 +177,7 @@ const Equipment = () => {
             </div>
           </div>
           <div className="row">
-            <div className="col-4">
+            <div className="col-3">
               <label htmlFor="quantity">Quantity</label>
               <input
                 type="number"
@@ -200,7 +201,7 @@ const Equipment = () => {
                 required
               />
             </div>
-            <div className="col-4">
+            <div className="col-5">
               <label htmlFor="equipmentType">Equipment Type</label>
               <select
                 className="form-control"

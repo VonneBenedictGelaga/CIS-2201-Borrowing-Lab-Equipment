@@ -20,10 +20,6 @@
   left: 35%;
   top: 8%;
 }
-/*
-.insertEquipment .form-group {
-  padding-bottom: 10px;
-} */
 
 /* Display Equipment Page */
 
@@ -60,3 +56,8 @@
   z-index: 1;
 }
 
+/* Request Borrower*/
+
+.container.reqBorr {
+  margin-top: 10px;
+}
