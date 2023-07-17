@@ -12,14 +12,23 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: blue;
+  /* color: blue; */
   text-decoration: underline;
   font-size: 16px;
 }
 
+.active {
+  box-sizing: border-box;
+  font-weight: bolder;
+  background-color: #00000016;
+  border-radius: 5px;
+}
+
 .logo {
-  width: 10px; /* Adjust the width of the logo div */
-  height: 5px; /* Adjust the height of the logo div */
+  width: 10px;
+  /* Adjust the width of the logo div */
+  height: 5px;
+  /* Adjust the height of the logo div */
 }
 
 .logo-image {

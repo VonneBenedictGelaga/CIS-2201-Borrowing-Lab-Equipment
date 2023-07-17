@@ -18,7 +18,7 @@ const App = () => {
       navbar={<Navbar />}
       display={<Equipment />}
       // equipmentborrower={<EquipmentBorrower />}
-      reqborrower={<Request />}
+      reqborrower={<DisplayBorrower />}
     />
   );
 };

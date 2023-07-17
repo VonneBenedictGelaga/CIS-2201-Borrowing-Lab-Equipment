@@ -153,6 +153,52 @@ const DisplayBorrower = () => {
   
   return (
     <div className="container displayAdmin">
+
+      <nav>
+        <Pagination className='pagination-css'>
+          <Pagination.Prev
+            onClick={() => {
+              if (currentPage > 1) {
+                paginate(currentPage - 1);
+              }
+            }}
+            disabled={currentPage === 1}
+          />
+          {Array.from({ length: totalPages }, (_, i) => (
+            <Pagination.Item
+              key={i + 1}
+              active={i + 1 === currentPage}
+              onClick={() => paginate(i + 1)}
+            >
+              {i + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next
+            onClick={() => {
+              if (currentPage < totalPages) {
+                paginate(currentPage + 1);
+              }
+            }}
+            disabled={currentPage === totalPages}
+          />
+        </Pagination>
+        
+
+        <Dropdown className="dropdown-css" onSelect={handleEquipTypeSelect}>
+          <Dropdown.Toggle variant="secondary" id="dropdown-equipType">
+            {selectedEquipType === 'default' ? 'Default' : selectedEquipType}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            {equipmentTypeOptions.map((option) => (
+              <Dropdown.Item key={option.value} eventKey={option.value}>
+                {option.label}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+      </nav>
+
+
       <Table className="table table-bordered table-striped custom-table" striped bordered>
         <thead className="thead-dark">
           <tr>
@@ -167,7 +213,7 @@ const DisplayBorrower = () => {
         </thead>
         <tbody>
           {currentEquipmentData.map((equipment, index) => (
-            <tr key={index}>
+            <tr className="" key={index}>
               <td>{equipment.equipName}</td>
               <td>{equipment.brand}</td>
               <td>{equipment.equipType}</td>
@@ -186,52 +232,6 @@ const DisplayBorrower = () => {
           ))}
         </tbody>
       </Table>
-
-      <div className="row">
-        <div className="col-md-4">
-          <Pagination>
-            <Pagination.Prev
-              onClick={() => {
-                if (currentPage > 1) {
-                  paginate(currentPage - 1);
-                }
-              }}
-              disabled={currentPage === 1}
-            />
-            {Array.from({ length: totalPages }, (_, i) => (
-              <Pagination.Item
-                key={i + 1}
-                active={i + 1 === currentPage}
-                onClick={() => paginate(i + 1)}
-              >
-                {i + 1}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next
-              onClick={() => {
-                if (currentPage < totalPages) {
-                  paginate(currentPage + 1);
-                }
-              }}
-              disabled={currentPage === totalPages}
-            />
-          </Pagination>
-        </div>
-        <div className="col-md-4">
-          <Dropdown onSelect={handleEquipTypeSelect}>
-            <Dropdown.Toggle variant="secondary" id="dropdown-equipType">
-              {selectedEquipType === 'default' ? 'Default' : selectedEquipType}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {equipmentTypeOptions.map((option) => (
-                <Dropdown.Item key={option.value} eventKey={option.value}>
-                  {option.label}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
-      </div>
 
       {selectedEquipment && (
         <div className="overlay">

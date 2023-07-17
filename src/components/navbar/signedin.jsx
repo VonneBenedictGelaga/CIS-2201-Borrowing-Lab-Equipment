@@ -1,37 +1,35 @@
 import React from 'react';
 import './navbar.css'
-import logo from '../../images/DCISM.jpg'
+import logo from '../../images/DCISM.png'
 import { BsBoxArrowRight } from "react-icons/bs";
 
-const NavbarSignedIn = ({ handleDashboardClick, handleRequestsClick, handleEquipmentsClick, handleSettingsClick, handleSignOutClick }) => {
+const NavbarSignedIn = ({ handleDashboardClick, handleRequestsClick, handleEquipmentsClick, handleSettingsClick, handleSignOutClick, clickPage }) => {
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div className="container-fluid">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <img src={logo} alt="Logo" width="200" height="40"/>
-            <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">DASHBOARD</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">EQUIPMENTS</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">REQUESTS</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#">SETTINGS</a>
-            </li>
-          </ul>
+      <img src={logo} width={240} height={40} alt="DCISM-logo" />
+      <div className="navbar container mr-auto text-uppercase bg-light navbar-light" id="navbarSupportedContent">
+        <ul className="navbar-nav mr-auto">
+          <li className="nav-item">
+            <a className="nav-link" href="#">Dashboard</a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="#">Equipments</a>
+          </li>
+          <li className="nav-item active">
+            <a className="nav-link" href="#">Requests</a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="#">Settings</a>
+          </li>
+        </ul>
 
-          <ul className="navbar-nav">
+        <ul className="nav navbar-nav navbar-right">
             <li className="nav-item">
               <a className="nav-link" href="#"><BsBoxArrowRight /></a>
             </li>
-          </ul>
+        </ul>
 
-        </div>
-      </nav>
+      </div>
     </>
   );
 };
