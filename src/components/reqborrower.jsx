@@ -6,6 +6,7 @@ import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'
 
 const RequestBorrower = () => {
   const [borrowersName, setBorrowersName] = useState('');
+  const [borrowerType, setBorrowerType] = useState('student');
   const [borrowersEmail, setBorrowersEmail] = useState('');
   const [reason, setReason] = useState('');
   const [dateBorrow, setDateBorrow] = useState('');
@@ -47,18 +48,20 @@ const RequestBorrower = () => {
       const requestRef = collection(db, 'Request');
       await addDoc(requestRef, {
         borrowerName: borrowersName,
+        borrowerType: borrowerType,
         borrowerEmail: borrowersEmail,
         dateBorrowed: dateBorrow,
         dateReturned: dateReturn,
         reasonBorrowed: reason,
         equipment: queryItems.map((item) => ({ equipmentId: item.equipmentId, quantity: item.quantity })),
-        status1: 'pending',
-        status2: 'pending',
-        status3: 'pending',
+        status1: 'Pending',
+        status2: 'Pending',
+        status3: 'Pending',
       });
   
       // Clear the form fields
       setBorrowersName('');
+      setBorrowerType('student');
       setBorrowersEmail('');
       setReason('');
       setDateBorrow('');
@@ -110,6 +113,14 @@ const handleDeleteEquipment = async (equipmentId) => {
 
 // ...
 
+  const borrowerTypeOptions = [
+    { label: 'Student', value: 'Student' },
+    { label: 'Faculty', value: 'Faculty' },
+    { label: 'Cisco', value: 'Cisco' },
+    { label: 'Teacher', value: 'Teacher' },
+    { label: 'Alumni', value: 'Alumni' },
+    { label: 'Others', value: 'O`thers' },
+  ];
 
   return (
     <div className="container reqBorr">
@@ -129,16 +140,36 @@ const handleDeleteEquipment = async (equipmentId) => {
             <div className="card-body">
               {/* Update form */}
               <form className="d-flex flex-column" onSubmit={handleFormSubmit}>
-                <label htmlFor="edit2_borrowers_name">Borrower's Name</label>
-                <input
-                  className="form-control mb-2"
-                  name="edit2_borrowers_name"
-                  type="text"
-                  placeholder="e.g. Ivanne Dave L. Bayer"
-                  required
-                  value={borrowersName}
-                  onChange={(e) => setBorrowersName(e.target.value)}
-                />
+                <div className="row">
+                  <div className="col-md-6">
+                    <label htmlFor="edit2_borrowers_name">Borrower's Name</label>
+                    <input
+                      className="form-control mb-2"
+                      name="edit2_borrowers_name"
+                      type="text"
+                      placeholder="e.g. Ivanne Dave L. Bayer"
+                      required
+                      value={borrowersName}
+                      onChange={(e) => setBorrowersName(e.target.value)}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <label htmlFor="edit2_borrower_type">Borrower Type</label>
+                    <select
+                      className="form-control mb-2"
+                      name="edit2_borrower_type"
+                      required
+                      value={borrowerType}
+                      onChange={(e) => setBorrowerType(e.target.value)}
+                    >
+                      {borrowerTypeOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
 
                 <label htmlFor="edit2_borrowers_email">Borrower's Email</label>
                 <input

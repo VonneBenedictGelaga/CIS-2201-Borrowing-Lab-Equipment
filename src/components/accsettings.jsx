@@ -12,7 +12,6 @@ const Equipment = () => {
     birthday: '',
     uscId: '',
     email: '',
-    file: null,
   });
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [formError, setFormError] = useState('');
@@ -30,11 +29,6 @@ const Equipment = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUserData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setUserData((prevData) => ({ ...prevData, file }));
   };
 
   const handleSubmit = async (e) => {
@@ -72,7 +66,6 @@ const Equipment = () => {
         birthday: '',
         uscId: '',
         email: '',
-        file: null,
       });
 
       // Show success alert and clear form error
@@ -100,18 +93,6 @@ const Equipment = () => {
           </div>
         )}
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="file">Insert User Photo</label>
-            <br />
-            <input
-              type="file"
-              className="form-control-file"
-              id="file"
-              name="file"
-              onChange={handleFileChange}
-              required
-            />
-          </div>
           <div className='row'>
             <div className="col-md-6">
               <label htmlFor="firstName">First Name</label>

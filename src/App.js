@@ -8,8 +8,10 @@ import Equipment from './components/equipment'
 import DisplayBorrower from './components/displayborrower'
 import ReqBorrower from './components/reqborrower'
 import Request from './components/request'
+import AccSettings from './components/accsettings'
 
 import Login from './components/login/login';
+import RequestBorrower from './components/reqborrower'
 
 const App = () => {
   return (
@@ -18,7 +20,7 @@ const App = () => {
       navbar={<Navbar />}
       display={<Equipment />}
       // equipmentborrower={<EquipmentBorrower />}
-      reqborrower={<Request />}
+      reqborrower={<ReqBorrower />}
     />
   );
 };
