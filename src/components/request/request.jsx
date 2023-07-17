@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
-<<<<<<< HEAD:src/components/request/request.jsx
 import '../../styles/layout.css';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
-=======
-import '../styles/layout.css';
-import { getFirestore, collection, getDocs, doc, getDoc } from 'firebase/firestore';
-import { Pagination } from 'react-bootstrap';
->>>>>>> f1c24b278bdbd51c52dbecc9a280c3b121fb9cd6:src/components/request.jsx
 
 const RequestList = () => {
   const [requestData, setRequestData] = useState([]);
