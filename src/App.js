@@ -20,7 +20,7 @@ const App = () => {
       navbar={<Navbar />}
       display={<Equipment />}
       // equipmentborrower={<EquipmentBorrower />}
-      reqborrower={<ReqBorrower />}
+      reqborrower={<Request />}
     />
   );
 };
