@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import '../../styles/temp.css';
 import { db } from '../../config/firebase'; // Import the db object
 import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'; // Import collection, getDocs, deleteDoc, and doc
+import USClogo from '../../images/University_of_San_Carlos_logo.png';
+import { Login } from '../login/login';
+
 
 const RequestBorrower = () => {
   const [borrowersName, setBorrowersName] = useState('');
@@ -13,7 +16,8 @@ const RequestBorrower = () => {
   const [selectedEquipment, setSelectedEquipment] = useState(null);
   const [showUpdateEquipment, setShowUpdateEquipment] = useState(false);
   const [queryItems, setQueryItems] = useState([]);
-
+  const [showLogin, setShowLogin] = useState(false);
+  
   useEffect(() => {
     fetchQueryItems();
   }, []);
@@ -32,6 +36,14 @@ const RequestBorrower = () => {
     } catch (error) {
       console.log('Error retrieving query items:', error);
     }
+  };
+
+  const handleLoginClick = () => {
+    setShowLogin(true);
+  };
+
+  const handleLoginClose = () => {
+    setShowLogin(false);
   };
 
   const handleFormSubmit = async (event) => {
@@ -118,12 +130,22 @@ const handleDeleteEquipment = async (equipmentId) => {
     { label: 'Cisco', value: 'Cisco' },
     { label: 'Teacher', value: 'Teacher' },
     { label: 'Alumni', value: 'Alumni' },
-    { label: 'Others', value: 'O`thers' },
+    { label: 'Others', value: 'Others' },
   ];
 
   return (
     <div className="container reqBorr">
+      {showLogin && <Login onClose={handleLoginClose}/>}
       <div className="row">
+        <div className="col-md-5">
+          <div className="usc-logo">
+            <img src={USClogo} alt="USC Logo" className="usc-logo" />
+          </div>
+          <div className="title">
+            LAB EQUIPMENT BORROWING MODULE
+            <div className="titlechild" onClick={handleLoginClick} style={{ cursor: 'pointer', textDecoration: 'underline' }}>USC staff? Sign in here.</div>
+          </div>
+        </div>
         <div className="col-md-7 mt-4">
           <div className="card bg-white mb-3 reqBor_container">
             <div className="card-header">Update Form</div>

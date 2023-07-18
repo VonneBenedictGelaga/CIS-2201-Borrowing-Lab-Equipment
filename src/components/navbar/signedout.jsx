@@ -1,15 +1,33 @@
-import React, {useState} from 'react';
-import { Login } from '../login/login.jsx'
+import React, { useState } from 'react';
+import { Login } from '../login/login.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ReqBorrower from '../request/reqborrower.jsx';
+import DisplayBorrower from '../equipment/displayborrower.jsx';
 
-const NavbarSignedOut = ({ handleEquipmentsClick, children  }) => {
+import { BsHouse } from 'react-icons/bs';
+import { BsFillDisplayFill } from 'react-icons/bs';
+import { BsGrid1X2Fill } from 'react-icons/bs';
+import logo from '../../images/DCISM.jpg'
+
+const NavbarSignedOut = () => {
+  const [activeTab, setActiveTab] = useState('home');
+  const [isEquipmentsActive, setIsEquipmentsActive] = useState(false);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
+  const handleEquipmentsClick = () => {
+    setIsEquipmentsActive(true);
+    setActiveTab('equipments');
+  };
 
   return (
     <div>
       {/* Bootstrap Navbar */}
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <div className="container">
-          <a className="navbar-brand" href="#">My App</a>
+          <img src={logo} width={180} height={55} alt="DCISM-logo" />
           <button
             className="navbar-toggler"
             type="button"
@@ -23,26 +41,32 @@ const NavbarSignedOut = ({ handleEquipmentsClick, children  }) => {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
-              <li className="nav-item">
-                <a className="nav-link" href="#">Home</a>
+              <li className="nav-item leftest">
+                <button
+                  className={`text-primary nav-link ${activeTab === 'home' ? 'active' : ''}`}
+                  onClick={() => handleTabClick('home')}
+                >
+                  <BsHouse />
+                </button>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">Equipments</a>
+                <button
+                  className={`text-primary nav-link ${activeTab === 'equipments' ? 'active' : ''}`}
+                  onClick={handleEquipmentsClick}
+                >
+                  <BsFillDisplayFill />
+                </button>
               </li>
             </ul>
           </div>
         </div>
       </nav>
 
-      {/* Content */}
-      <main>
-        {children}
-      </main>
-
-      {/* Common footer */}
-      <footer>
-        {/* Footer content */}
-      </footer>
+      {activeTab === 'home' ? (
+        <ReqBorrower />
+      ) : activeTab === 'equipments' ? (
+        <DisplayBorrower />
+      ) : null}
     </div>
   );
 };

@@ -1,74 +1,75 @@
 import { useState } from "react";
 import { auth } from "../../config/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-<<<<<<< HEAD
 
-=======
->>>>>>> f1c24b278bdbd51c52dbecc9a280c3b121fb9cd6
-
-export const Login = () => {
+export const Login = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isVisible, setIsVisible] = useState(true);
 
-<<<<<<< HEAD
-  function login (){
-    if(validate_field(email)===false || validate_field(password) === false){
-      alert("incomplete fields");
-      return
-    }
-    
-    if(validate_email(email) === false  || validate_password(password) === false){
-      alert("email or password incorrect");
-      return
-    }
-
-    signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential)=>{
-      alert("logged in successfully");
-    })
-    .catch((error)=>{
-      alert(error);
-    })
-
-  }
-
-  return <div>
-    <input 
-      placeholder="Email"
-      onChange={(e)=>setEmail(e.target.value)}
-    />
-    <input 
-      placeholder="Password"
-      onChange={(e)=>setPassword(e.target.value)}
-    />
-    <button onClick={login}>Sign in</button>
-  </div>
-}
-=======
   const signIn = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      // User signed in successfully
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      if (user.uid === "MOaqu8jBfGMh4QpdWQ48ETYWGuO2") {
+        onClose("YES");
+      } else {
+        onClose("NO");
+      }
     } catch (error) {
       console.log("Error:", error.code, error.message);
     }
   };
 
+  const handleClose = () => {
+    setIsVisible(false); // Set the visibility to false to hide the component
+
+    if (onClose) {
+      onClose("NO"); // Call the onClose function provided by the parent component with "NO"
+    }
+  };
+
+  if (!isVisible) {
+    return null; // Return null to hide the component
+  }
+
   return (
-    <div>
-      <input
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        placeholder="Password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={signIn}>Sign in</button>
+    <div className="overlay">
+      <div className="expanded-card">
+        <div className="card col-4 insertEquipment">
+          <div className="card-header">
+            <div className="row">
+              <div className="col-11">
+                <h5 className="card-title">LOGIN DETAILS</h5>
+              </div>
+              <div className="col-1 text-right">
+                <button className="btn btn-close" onClick={handleClose}></button>
+              </div>
+            </div>
+          </div>
+          <div className="card-body">
+            <input
+              className="form-control"
+              placeholder="Email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              className="form-control"
+              placeholder="Password"
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button className="btn btn-primary" onClick={signIn}>
+              Sign in
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
->>>>>>> f1c24b278bdbd51c52dbecc9a280c3b121fb9cd6
+
 
 
 function validate_email(email) {

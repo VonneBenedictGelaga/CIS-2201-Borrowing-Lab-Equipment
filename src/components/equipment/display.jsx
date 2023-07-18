@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pagination, Table, Dropdown } from 'react-bootstrap';
-import '../styles/layout.css';
+import '../../styles/layout.css';
 import {
   getFirestore,
   collection,
