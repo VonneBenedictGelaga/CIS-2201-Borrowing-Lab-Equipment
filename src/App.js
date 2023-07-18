@@ -3,7 +3,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useState, useEffect } from "react";
 
 import Layout from  "./components/layout";
-import Navbar from "./components/navbar";
+import Navbar from "./components/navbar/signedin";
 import MainPage from "./components/main";
 import Display from "./components/equipment/display.jsx"
 

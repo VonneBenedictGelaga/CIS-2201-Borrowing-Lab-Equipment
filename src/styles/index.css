@@ -4,7 +4,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
-  background-image: url("../images/University_of_San_Carlos_logo2.png");
+  /* /background-image: url("../images/University_of_San_Carlos_logo2.png"); */
+  background-color: navy;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -26,4 +27,8 @@ body::before {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.page-link{
+  background-color: navy;
 }

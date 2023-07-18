@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Pagination, Table, Dropdown } from 'react-bootstrap';
 import '../../styles/layout.css';
+import '../../styles/display.css';
 import {
   getFirestore,
   collection,
@@ -125,29 +126,44 @@ const EquipmentList = () => {
 
   return (
     <div className="container displayAdmin">
-      <Table className="table table-bordered table-striped custom-table" striped bordered>
+      <div className='container-of-content'>
+       <div className="col-md-4">
+          <Dropdown className='custom-dropdown' onSelect={handleEquipTypeSelect}>
+            <Dropdown.Toggle variant="secondary" id="dropdown-equipType">
+              {selectedEquipType === 'default' ? 'Default' : selectedEquipType}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {equipmentTypeOptions.map((option) => (
+                <Dropdown.Item key={option.value} eventKey={option.value}>
+                  {option.label}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+      <Table className="table table-striped custom-table" bordered={false}>
         <thead className="thead-dark">
           <tr>
-            <th>Equipment Name</th>
-            <th>Brand</th>
-            <th>Equipment Type</th>
-            <th>Asset Code</th>
-            <th>Serial Number</th>
-            <th>Quantity</th>
-            <th></th>
-            <th></th>
+              <th className="custom-table-header">Equipment Name</th>
+              <th className="custom-table-header">Brand</th>
+              <th className="custom-table-header">Equipment Type</th>
+              <th className="custom-table-header">Asset Code</th>
+              <th className="custom-table-header">Serial Number</th>
+              <th className="custom-table-header">Quantity</th>
+              <th className="custom-table-header"></th>
+              <th className="custom-table-header"></th>
           </tr>
         </thead>
         <tbody>
           {currentEquipmentData.map((equipment, index) => (
-            <tr key={index}>
-              <td>{equipment.equipName}</td>
-              <td>{equipment.brand}</td>
-              <td>{equipment.equipType}</td>
-              <td>{equipment.assetCode}</td>
-              <td>{equipment.serialNum}</td>
-              <td>{equipment.equipQuantity}</td>
-              <td>
+            <tr classNamekey={index}>
+              <td className='custom-table-data'>{equipment.equipName}</td>
+              <td className='custom-table-data'>{equipment.brand}</td>
+              <td className='custom-table-data'>{equipment.equipType}</td>
+              <td className='custom-table-data'>{equipment.assetCode}</td>
+              <td className='custom-table-data'>{equipment.serialNum}</td>
+              <td className='custom-table-data'>{equipment.equipQuantity}</td>
+              <td className='custom-table-data'> 
                 <button className="btn btn-primary" onClick={() => handleUpdateClick(equipment)}>
                   Update
                 </button>
@@ -163,7 +179,9 @@ const EquipmentList = () => {
       </Table>
 
       <div className="row">
-        <div className="col-md-4">
+        <div className='col'></div>
+        <div className='col'></div>
+        <div className="cool col">
           <Pagination>
             <Pagination.Prev
               onClick={() => {
@@ -192,28 +210,15 @@ const EquipmentList = () => {
             />
           </Pagination>
         </div>
-        <div className="col-md-4">
-          <Dropdown onSelect={handleEquipTypeSelect}>
-            <Dropdown.Toggle variant="secondary" id="dropdown-equipType">
-              {selectedEquipType === 'default' ? 'Default' : selectedEquipType}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {equipmentTypeOptions.map((option) => (
-                <Dropdown.Item key={option.value} eventKey={option.value}>
-                  {option.label}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
       </div>
-
+      </div>         
       {selectedEquipment && (
         <div className="overlay">
           <div className="expanded-card">
-            <div className="card col-4 insertEquipment">
+            <div className='container-card'>
               <div className="card-header">
                 <div className="row">
+                <div className="col-11"> </div>
                   <div className="col-11">
                     <h5 className="card-title">UPDATE EQUIPMENT</h5>
                   </div>
@@ -307,13 +312,14 @@ const EquipmentList = () => {
                       </select>
                     </div>
                   </div>
-                  <br />
-                  <button type="submit" className="btn btn-primary">
-                    Update
-                  </button>
+                  <div className="card-footer d-flex justify-content-center">
+                    <button type="submit" className="btn btn-update">
+                      Update
+                    </button>
+                  </div>
                 </form>
               </div>
-            </div>
+              </div>
           </div>
         </div>
       )}
