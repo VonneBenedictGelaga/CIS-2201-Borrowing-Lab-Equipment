@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Pagination, Table, Dropdown } from 'react-bootstrap';
-import '../styles/layout.css';
+import { Pagination, Table, Dropdown, Modal, Button } from 'react-bootstrap';
+import './displayborrower.css';
+
 import {
   getFirestore,
   collection,
@@ -20,6 +21,7 @@ const DisplayBorrower = () => {
   const [itemsPerPage] = useState(8);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [selectedInfo, setSelectedInfo] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchEquipmentData = async () => {
@@ -49,6 +51,7 @@ const DisplayBorrower = () => {
     const selectedEquipment = equipmentData.find((equipment) => equipment.id === equipmentId);
     setSelectedEquipment(selectedEquipment);
     setSelectedQuantity(1);
+    setShowModal(true);
   };
 
   const handleEquipTypeSelect = (equipType) => {
@@ -112,15 +115,15 @@ const DisplayBorrower = () => {
       brand: selectedEquipment.brand,
       quantity: selectedQuantity,
     };
-  
+
     try {
       const db = getFirestore();
       const queryRef = collection(db, 'Query');
-  
+
       // Check if the selected equipment already exists in the 'Query' collection
       const existingEquipmentQuery = query(queryRef, where('equipmentId', '==', selectedEquipment.id));
       const existingEquipmentSnapshot = await getDocs(existingEquipmentQuery);
-  
+
       if (existingEquipmentSnapshot.empty) {
         // If the selected equipment doesn't exist, add it to the 'Query' collection
         await addDoc(queryRef, {
@@ -139,22 +142,45 @@ const DisplayBorrower = () => {
           quantity: selectedQuantity,
         });
       }
-  
+
       console.log('Equipment stored in Firebase successfully!');
     } catch (error) {
       console.log('Error storing equipment in Firebase:', error);
     }
-  
+
     // Reset selected equipment and quantity
     setSelectedEquipment(null);
     setSelectedQuantity(1);
+    setShowModal(false);
   };
-  
-  
+
+  const handleCloseModal = () => {
+    setSelectedEquipment(null);
+    setSelectedQuantity(1);
+    setShowModal(false);
+  };
+
   return (
     <div className="container displayAdmin">
-      <Table className="table table-bordered table-striped custom-table" striped bordered>
-        <thead className="thead-dark">
+      {/* DROPDOWN */}
+      <div className="d-flex justify-content-start dropdown">
+        <Dropdown onSelect={handleEquipTypeSelect}>
+          <Dropdown.Toggle variant="secondary" id="dropdown-equipType">
+            {selectedEquipType === 'default' ? 'Default' : selectedEquipType}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            {equipmentTypeOptions.map((option) => (
+              <Dropdown.Item key={option.value} eventKey={option.value}>
+                {option.label}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
+
+      {/* TABLE */}
+      <Table className="table table-light custom-table">
+        <thead>
           <tr>
             <th>Equipment Name</th>
             <th>Brand</th>
@@ -176,7 +202,7 @@ const DisplayBorrower = () => {
               <td>{equipment.equipQuantity}</td>
               <td>
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-secondary"
                   onClick={() => handleSelectEquipment(equipment.id)}
                 >
                   Select
@@ -187,187 +213,159 @@ const DisplayBorrower = () => {
         </tbody>
       </Table>
 
-      <div className="row">
-        <div className="col-md-4">
-          <Pagination>
-            <Pagination.Prev
-              onClick={() => {
-                if (currentPage > 1) {
-                  paginate(currentPage - 1);
-                }
-              }}
-              disabled={currentPage === 1}
-            />
-            {Array.from({ length: totalPages }, (_, i) => (
-              <Pagination.Item
-                key={i + 1}
-                active={i + 1 === currentPage}
-                onClick={() => paginate(i + 1)}
-              >
-                {i + 1}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next
-              onClick={() => {
-                if (currentPage < totalPages) {
-                  paginate(currentPage + 1);
-                }
-              }}
-              disabled={currentPage === totalPages}
-            />
-          </Pagination>
-        </div>
-        <div className="col-md-4">
-          <Dropdown onSelect={handleEquipTypeSelect}>
-            <Dropdown.Toggle variant="secondary" id="dropdown-equipType">
-              {selectedEquipType === 'default' ? 'Default' : selectedEquipType}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {equipmentTypeOptions.map((option) => (
-                <Dropdown.Item key={option.value} eventKey={option.value}>
-                  {option.label}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
+      {/* PAGINATION */}
+      <div className="d-flex justify-content-end pagination">
+        <Pagination>
+          <Pagination.Prev
+            onClick={() => {
+              if (currentPage > 1) {
+                paginate(currentPage - 1);
+              }
+            }}
+            disabled={currentPage === 1}
+          />
+          {Array.from({ length: totalPages }, (_, i) => (
+            <Pagination.Item
+              key={i + 1}
+              active={i + 1 === currentPage}
+              onClick={() => paginate(i + 1)}
+            >
+              {i + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next
+            onClick={() => {
+              if (currentPage < totalPages) {
+                paginate(currentPage + 1);
+              }
+            }}
+            disabled={currentPage === totalPages}
+          />
+        </Pagination>
       </div>
 
-      {selectedEquipment && (
-        <div className="overlay">
-          <div className="expanded-card">
-            <div className="card col-4 insertEquipment">
-              <div className="card-header">
-                <div className="row">
-                  <div className="col-11">
-                    <h5 className="card-title">EQUIPMENT DETAILS</h5>
-                  </div>
-                  <div className="col-1 text-right">
-                    <button
-                      className="btn btn-close"
-                      onClick={() => setSelectedEquipment(null)}
-                    ></button>
-                  </div>
-                </div>
-              </div>
-              <div className="card-body">
-                <div className="form-group">
-                  <label htmlFor="equipmentName">Equipment Name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="equipmentName"
-                    value={selectedEquipment.equipName}
-                    readOnly
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="description">Description</label>
-                  <textarea
-                    className="form-control"
-                    id="description"
-                    value={selectedEquipment.description}
-                    readOnly
-                    rows="2"
-                  ></textarea>
-                </div>
-                <div className="row">
-                  <div className="form-group col-md-6">
-                    <label htmlFor="assetCode">Asset Code</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="assetCode"
-                      value={selectedEquipment.assetCode}
-                      readOnly
-                    />
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label htmlFor="serialNumber">Serial Number</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="serialNumber"
-                      value={selectedEquipment.serialNum}
-                      readOnly
-                    />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="form-group col-md-4">
-                    <label htmlFor="quantity">Quantity</label>
-                    <div className="input-group">
-                      <span className="input-group-btn">
-                        <button
-                          className="btn btn-default"
-                          type="button"
-                          onClick={handleQuantityDecrease}
-                        >
-                          -
-                        </button>
-                      </span>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="quantity"
-                        value={selectedQuantity}
-                        min={1}
-                        max={selectedEquipment.equipQuantity}
-                        onChange={handleQuantityChange}
-                        readOnly
-                      />
-                      <span className="input-group-btn">
-                        <button
-                          className="btn btn-default"
-                          type="button"
-                          onClick={handleQuantityIncrease}
-                        >
-                          +
-                        </button>
-                      </span>
-                    </div>
-                  </div>
-                  <div className="form-group col-md-4">
-                    <label htmlFor="brand">Brand</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="brand"
-                      value={selectedEquipment.brand}
-                      readOnly
-                    />
-                  </div>
-                  <div className="form-group col-md-4">
-                    <label htmlFor="equipmentType">Equipment Type</label>
-                    <select
-                      className="form-control"
-                      id="equipmentType"
-                      value={selectedEquipment.equipType}
-                      disabled
-                    >
-                      {equipmentTypeOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <br></br>
-                <div className="text-center">
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={handleSelectEquipmentConfirm}
-                  >
-                    Select Equipment
-                  </button>
-                </div>
-              </div>
+      {/* MODAL */}
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>EQUIPMENT DETAILS</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="form-group">
+            <label htmlFor="equipmentName">Equipment Name</label>
+            <input
+              type="text"
+              className="form-control"
+              id="equipmentName"
+              value={selectedEquipment ? selectedEquipment.equipName : ''}
+              readOnly
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="description">Description</label>
+            <textarea
+              className="form-control"
+              id="description"
+              value={selectedEquipment ? selectedEquipment.description : ''}
+              readOnly
+              rows="2"
+            ></textarea>
+          </div>
+
+          <div className="row">
+            <div className="form-group col-md-6">
+              <label htmlFor="assetCode">Asset Code</label>
+              <input
+                type="text"
+                className="form-control"
+                id="assetCode"
+                value={selectedEquipment ? selectedEquipment.assetCode : ''}
+                readOnly
+              />
+            </div>
+            <div className="form-group col-md-6">
+              <label htmlFor="serialNumber">Serial Number</label>
+              <input
+                type="text"
+                className="form-control"
+                id="serialNumber"
+                value={selectedEquipment ? selectedEquipment.serialNum : ''}
+                readOnly
+              />
             </div>
           </div>
-        </div>
-      )}
+
+          <div className="row">
+            <div className="form-group col-md-4">
+              <label htmlFor="quantity">Quantity</label>
+              <div className="input-group">
+                <span className="input-group-btn">
+                  <button
+                    className="btn btn-default"
+                    type="button"
+                    onClick={handleQuantityDecrease}
+                  >
+                    -
+                  </button>
+                </span>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="quantity"
+                  value={selectedQuantity}
+                  min={1}
+                  max={selectedEquipment ? selectedEquipment.equipQuantity : ''}
+                  onChange={handleQuantityChange}
+                  readOnly
+                />
+                <span className="input-group-btn">
+                  <button
+                    className="btn btn-default"
+                    type="button"
+                    onClick={handleQuantityIncrease}
+                  >
+                    +
+                  </button>
+                </span>
+              </div>
+            </div>
+
+            <div className="form-group col-md-4">
+              <label htmlFor="brand">Brand</label>
+              <input
+                type="text"
+                className="form-control"
+                id="brand"
+                value={selectedEquipment ? selectedEquipment.brand : ''}
+                readOnly
+              />
+            </div>
+            <div className="form-group col-md-4">
+              <label htmlFor="equipmentType">Equipment Type</label>
+              <select
+                className="form-control"
+                id="equipmentType"
+                value={selectedEquipment ? selectedEquipment.equipType : ''}
+                disabled
+              >
+                {equipmentTypeOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleSelectEquipmentConfirm}>
+            Select Equipment
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
