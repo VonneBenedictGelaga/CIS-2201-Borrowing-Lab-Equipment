@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/temp.css';
-import { db } from '../../config/firebase'; // Import the db object
-import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'; // Import collection, getDocs, deleteDoc, and doc
+import { db } from '../../config/firebase';
+import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
 
 const RequestBorrower = () => {
   const [borrowersName, setBorrowersName] = useState('');
@@ -13,6 +13,7 @@ const RequestBorrower = () => {
   const [selectedEquipment, setSelectedEquipment] = useState(null);
   const [showUpdateEquipment, setShowUpdateEquipment] = useState(false);
   const [queryItems, setQueryItems] = useState([]);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     fetchQueryItems();
@@ -36,14 +37,44 @@ const RequestBorrower = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-  
+
+    const validationErrors = {};
+
+    if (!validate_field(borrowersName)) {
+      validationErrors.borrowersName = 'Borrower\'s name is required.';
+    }
+
+    if (!validate_field(borrowersEmail)) {
+      validationErrors.borrowersEmail = 'Borrower\'s email is required.';
+    } else if (!validate_email(borrowersEmail)) {
+      validationErrors.borrowersEmail = 'Invalid email format.';
+    }
+
+    if (!validate_field(dateBorrow)) {
+      validationErrors.dateBorrow = 'Date of borrowing is required.';
+    } else if (!validate_date(dateBorrow)) {
+      validationErrors.dateBorrow = 'Invalid date format or not a future date.';
+    }
+
+    if (!validate_field(dateReturn)) {
+      validationErrors.dateReturn = 'Date of returning is required.';
+    } else if (!validate_date(dateReturn)) {
+      validationErrors.dateReturn = 'Invalid date format or not a future date.';
+    } else if (!validate_date_range(dateBorrow, dateReturn)) {
+      validationErrors.dateReturn = 'Return date must be later than borrow date.';
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     try {
       if (queryItems.length === 0) {
         console.log('No query items found. Cannot submit request.');
         return;
       }
-  
-      // Insert form data into the Request table in the database
+
       const requestRef = collection(db, 'Request');
       await addDoc(requestRef, {
         borrowerName: borrowersName,
@@ -57,8 +88,7 @@ const RequestBorrower = () => {
         status2: 'Pending',
         status3: 'Pending',
       });
-  
-      // Clear the form fields
+
       setBorrowersName('');
       setBorrowerType('student');
       setBorrowersEmail('');
@@ -66,51 +96,68 @@ const RequestBorrower = () => {
       setDateBorrow('');
       setDateReturn('');
       setSelectedEquipment(null);
-  
-      // Delete all documents in the Query collection
+
       const queryRef = collection(db, 'Query');
       const querySnapshot = await getDocs(queryRef);
       querySnapshot.docs.forEach(async (doc) => {
         await deleteDoc(doc.ref);
       });
-  
+
       console.log('Request submitted successfully. Query items deleted.');
-  
-      // Update the queryItems state to an empty array
+
       setQueryItems([]);
-  
+      setErrors({});
+
       // Show success alert or perform any other action
     } catch (error) {
       console.log('Error submitting request:', error);
     }
-  };  
+  };
 
   const handleShowEquipment = (event) => {
     event.preventDefault();
     setShowUpdateEquipment(true);
-  };  
+  };
 
   const handleExitUpdateEquipment = () => {
     setShowUpdateEquipment(false);
   };
 
-// ...
+  const handleDeleteEquipment = async (equipmentId) => {
+    try {
+      const queryDocRef = doc(db, 'Query', equipmentId);
+      await deleteDoc(queryDocRef);
+      console.log('Equipment deleted successfully!');
 
-const handleDeleteEquipment = async (equipmentId) => {
-  try {
-    // Delete the equipment item from the Query collection
-    const queryDocRef = doc(db, 'Query', equipmentId);
-    await deleteDoc(queryDocRef);
-    console.log('Equipment deleted successfully!');
+      setQueryItems((prevItems) => prevItems.filter((item) => item.id !== equipmentId));
+    } catch (error) {
+      console.log('Error deleting equipment:', error);
+    }
+  };
 
-    // Update the queryItems state by removing the deleted item
-    setQueryItems((prevItems) => prevItems.filter((item) => item.id !== equipmentId));
-  } catch (error) {
-    console.log('Error deleting equipment:', error);
-  }
-};
+  const validate_email = (email) => {
+    const expression = /^\w{8}@usc\.edu\.ph$/;
+    return expression.test(email);
+  };
 
-// ...
+  const validate_date = (date) => {
+    const currentDate = new Date().toISOString().split('T')[0];
+    return date >= currentDate;
+  };
+
+  const validate_date_range = (start, end) => {
+    return start < end;
+  };
+
+  const validate_field = (field) => {
+    if (field == null) {
+      return false;
+    } else if (field.length <= 0) {
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   const borrowerTypeOptions = [
     { label: 'Student', value: 'Student' },
@@ -118,7 +165,7 @@ const handleDeleteEquipment = async (equipmentId) => {
     { label: 'Cisco', value: 'Cisco' },
     { label: 'Teacher', value: 'Teacher' },
     { label: 'Alumni', value: 'Alumni' },
-    { label: 'Others', value: 'O`thers' },
+    { label: 'Others', value: 'Others' },
   ];
 
   return (
@@ -128,7 +175,6 @@ const handleDeleteEquipment = async (equipmentId) => {
           <div className="card bg-white mb-3 reqBor_container">
             <div className="card-header">Update Form</div>
             <div className="card-body">
-              {/* Update form */}
               <form className="d-flex flex-column" onSubmit={handleFormSubmit}>
                 <div className="row">
                   <div className="col-md-6">
@@ -160,7 +206,7 @@ const handleDeleteEquipment = async (equipmentId) => {
                     </select>
                   </div>
                 </div>
-
+                {errors.borrowersName && <p>{errors.borrowersName}</p>}
                 <label htmlFor="edit2_borrowers_email">Borrower's Email</label>
                 <input
                   className="form-control mb-2"
@@ -171,7 +217,7 @@ const handleDeleteEquipment = async (equipmentId) => {
                   value={borrowersEmail}
                   onChange={(e) => setBorrowersEmail(e.target.value)}
                 />
-
+                {errors.borrowersEmail && <p>{errors.borrowersEmail}</p>}
                 <label htmlFor="edit2_reason">Reason for Borrowing</label>
                 <textarea
                   className="form-control mb-2"
@@ -181,7 +227,6 @@ const handleDeleteEquipment = async (equipmentId) => {
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
                 ></textarea>
-
                 <div className="row">
                   <div className="col-md-6">
                     <label htmlFor="edit2_date_borrow">Date of Borrowing Equipment</label>
@@ -193,6 +238,7 @@ const handleDeleteEquipment = async (equipmentId) => {
                       value={dateBorrow}
                       onChange={(e) => setDateBorrow(e.target.value)}
                     />
+                    {errors.dateBorrow && <p>{errors.dateBorrow}</p>}
                   </div>
                   <div className="col-md-6">
                     <label htmlFor="edit2_date_return">Date of Returning Equipment</label>
@@ -204,15 +250,14 @@ const handleDeleteEquipment = async (equipmentId) => {
                       value={dateReturn}
                       onChange={(e) => setDateReturn(e.target.value)}
                     />
+                    {errors.dateReturn && <p>{errors.dateReturn}</p>}
                   </div>
                 </div>
-
                 {!selectedEquipment && (
                   <button className="btn btn-link mt-3" onClick={handleShowEquipment}>
                     Show Chosen Equipment
                   </button>
                 )}
-
                 <button className="btn btn-primary mt-3" type="submit">
                   Submit
                 </button>
