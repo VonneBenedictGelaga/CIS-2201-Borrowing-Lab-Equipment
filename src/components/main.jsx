@@ -6,12 +6,20 @@ import { Home } from './landing/home.jsx';
 import { Login } from './login/login.jsx';
 import  RequestBorrower  from './request/reqborrower.jsx';
 
+// import { generateReleaseFormID } from "./release/releaseform.js";
+import { getDocumentsWithReleaseFormID } from './release/getallreleaseform.js'
 
 const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
 });
 
 const MainPage = () => {
+
+  // const documentId = 'ZzAH9A68I6srEiNYhQTs';
+  // const borrowerType = 'student';
+  // generateReleaseFormID(documentId, borrowerType);
+
+  getDocumentsWithReleaseFormID();
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
 
@@ -31,6 +39,8 @@ const MainPage = () => {
   const handleSignInClick = () => {
     setShowLogin(true);
   };
+
+  
 
   return (
     <main>
