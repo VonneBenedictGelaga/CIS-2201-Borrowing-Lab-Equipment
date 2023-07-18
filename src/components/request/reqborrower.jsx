@@ -65,9 +65,7 @@ const RequestBorrower = () => {
         dateReturned: dateReturn,
         reasonBorrowed: reason,
         equipment: queryItems.map((item) => ({ equipmentId: item.equipmentId, quantity: item.quantity })),
-        status1: 'Pending',
-        status2: 'Pending',
-        status3: 'Pending',
+        status: 'Verified',
       });
   
       // Clear the form fields

@@ -2,25 +2,50 @@ import { useState } from "react";
 import { auth } from "../../config/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-export const Login = ({ onClose }) => {
+export const Login = ({ onClose, onDocumentId }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isVisible, setIsVisible] = useState(true);
 
-  const signIn = async () => {
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      
-      if (user.uid === "MOaqu8jBfGMh4QpdWQ48ETYWGuO2") {
-        onClose("YES");
-      } else {
-        onClose("NO");
-      }
-    } catch (error) {
-      console.log("Error:", error.code, error.message);
+  function login() {
+    if (validate_field(email) === false || validate_field(password) === false) {
+      alert("Incomplete fields");
+      return;
     }
-  };
+
+    if (validate_email(email) === false || validate_password(password) === false) {
+      alert("Email or password incorrect");
+      return;
+    }
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        const userId = user.uid;
+        let documentId = null;
+
+        if (userId === "LNudqBX1odcAbVKBqoh6VGpgjj43") {
+          documentId = "LNudqBX1odcAbVKBqoh6VGpgjj43";
+        } else if (userId === "MOaqu8jBfGMh4QpdWQ48ETYWGuO2") {
+          documentId = "MOaqu8jBfGMh4QpdWQ48ETYWGuO2";
+        } else if (userId === "OUaIDJiaTAT9cOpvCG8L3rVhNm32") {
+          documentId = "OUaIDJiaTAT9cOpvCG8L3rVhNm32";
+        }
+
+        if (userId) {
+          localStorage.setItem("userId", userId); // Store the user ID in local storage
+        }
+
+        if (userId === "MOaqu8jBfGMh4QpdWQ48ETYWGuO2") {
+          onClose("YES");
+        } else {
+          onClose("NO");
+        }
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  }
 
   const handleClose = () => {
     setIsVisible(false); // Set the visibility to false to hide the component
@@ -60,7 +85,7 @@ export const Login = ({ onClose }) => {
               type="password"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button className="btn btn-primary" onClick={signIn}>
+            <button className="btn btn-primary" onClick={login}>
               Sign in
             </button>
           </div>
@@ -71,22 +96,21 @@ export const Login = ({ onClose }) => {
 };
 
 
-
 function validate_email(email) {
   const expression = /^\w{8}@usc\.edu\.ph$/;
   return expression.test(email);
 }
 
-  function validate_password(password) {
-    return password.length >= 6;
-  }
+function validate_password(password) {
+  return password.length >= 6;
+}
 
-  function validate_field(field){
-    if(field == null){
-      return false;
-    }else if(field.length <= 0){
-      return false;
-    }else{
-      return true;
-    }
+function validate_field(field) {
+  if (field == null) {
+    return false;
+  } else if (field.length <= 0) {
+    return false;
+  } else {
+    return true;
   }
+}
