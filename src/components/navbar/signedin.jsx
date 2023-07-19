@@ -36,7 +36,7 @@ const NavbarSignedIn = () => {
   return (
     <>
       {/* Bootstrap Navbar */}
-    <nav className="navbar navbar-expand-lg navbar-light bg-light custom-navbar">
+    <nav className="navbar navbar-expand-sm navbar-light bg-light custom-navbar">
       <img src={logo} alt="Logo" width="200" height="40" />
 
       <div className="ml-auto"> {/* Add this div to push the content to the right */}
