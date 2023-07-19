@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/temp.css';
-import { getFirestore, collection, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { Pagination } from 'react-bootstrap';
+import { notifyRequestRejection, notifyRequestApproval } from '../email/notify';
+import { updateEquipmentQuantity, updateReturnedEquipmentQuantity } from '../request/requestmath.js';
 
 const RequestList = () => {
   const [requestData, setRequestData] = useState([]);
@@ -73,22 +75,86 @@ const RequestList = () => {
   };
 
   const handleAcceptRequest = async (equipment) => {
-    // Implement the logic to update the status based on the user ID
     if (userId === "MOaqu8jBfGMh4QpdWQ48ETYWGuO2") {
       // User ID is "MOaqu8jBfGMh4QpdWQ48ETYWGuO2" (Verify)
-      await updateStatus(equipment.id, "Initially Approved");
-      updateRequestStatus(equipment.id, "Initially Approved");
+      await updateStatus(equipment.id, "initial_approval");
+      updateRequestStatus(equipment.id, "initial_approval");
     } else if (userId === "LNudqBX1odcAbVKBqoh6VGpgjj43") {
       // User ID is "LNudqBX1odcAbVKBqoh6VGpgjj43" (Verify)
-      await updateStatus(equipment.id, "Fully Approved");
-      updateRequestStatus(equipment.id, "Fully Approved");
+      await updateStatus(equipment.id, "full_approval");
+      updateRequestStatus(equipment.id, "full_approval");
+
+      notifyRequestApproval(equipment.borrowerEmail);
     }
   };
   
   const handleRejectRequest = async (equipment) => {
     // Implement the logic to update the status to "Rejected"
-    await updateStatus(equipment.id, "Rejected");
-    updateRequestStatus(equipment.id, "Rejected");
+    await updateStatus(equipment.id, 'rejected');
+    updateRequestStatus(equipment.id, 'rejected');
+
+    // Call notifyRequestRejection function to send rejection email
+    notifyRequestRejection(equipment.borrowerEmail);
+  };
+
+  const handleReleaseForm = async (equipment) => {
+    // Implement the logic to update the status to "Released"
+    await updateStatus(equipment.id, "released");
+    updateRequestStatus(equipment.id, "released");
+  
+    // Call notifyRequestApproval function to send the approval email
+    notifyRequestApproval(equipment.borrowerEmail);
+  };
+  
+  const handleEquipAction = async (selectedEquipment) => {
+    if (selectedEquipment.status === 'full_approval') {
+      // Release the equipment
+      await handleReleaseEquip(selectedEquipment);
+    } else if (selectedEquipment.status === 'released') {
+      // Return the equipment
+      await handleReturnEquip(selectedEquipment);
+    }
+  };
+  
+  const handleReleaseEquip = async (equipment) => {
+    try {
+      const releasedEquipment = equipment.equipment;
+      const db = getFirestore();
+  
+      // Update the equipment quantity in the Equipments collection
+      await updateEquipmentQuantity(releasedEquipment);
+  
+      // Update the request status to "Released"
+      await updateStatus(equipment.id, "released");
+      updateRequestStatus(equipment.id, "released");
+  
+      // Update the selected equipment status to "Released"
+      setSelectedEquipment((prevEquipment) => ({
+        ...prevEquipment,
+        status: "released"
+      }));
+    } catch (error) {
+      console.log('Error releasing equipment:', error);
+    }
+  };
+  
+  const handleReturnEquip = async (equipment) => {
+    try {
+      // Update the equipment quantity in the Equipments collection
+      await updateReturnedEquipmentQuantity(equipment.equipment);
+  
+      // Implement the logic to update the status to "Returned"
+      await updateStatus(equipment.id, "returned");
+      updateRequestStatus(equipment.id, "returned");
+  
+      // Update the selected equipment status to "Returned"
+      setSelectedEquipment((prevEquipment) => ({
+        ...prevEquipment,
+        status: "returned"
+      }));
+    } catch (error) {
+      console.log('Error returning equipment:', error);
+    }
   };
   
   const updateStatus = async (equipmentId, newStatus) => {
@@ -139,8 +205,8 @@ const RequestList = () => {
         </thead>
         <tbody>
         {currentItems.map((request, index) => {
-              // Check the user ID and request status to determine if the table row should be displayed
-              if (userId === "MOaqu8jBfGMh4QpdWQ48ETYWGuO2" && request.status === "Verified") {
+                      // LAB HEAD
+              if (userId === "MOaqu8jBfGMh4QpdWQ48ETYWGuO2" && request.status === "verified") {
                 return (
                   <tr key={index}>
                     <td>{request.borrowerEmail}</td>
@@ -157,8 +223,8 @@ const RequestList = () => {
                       </button>
                     </td>
                   </tr>
-                );
-              } else if (userId === "LNudqBX1odcAbVKBqoh6VGpgjj43" && (request.status === "Initially Approved" || request.status === "Released" || request.status === "Returned")) {
+                );      //DEPT CHAIR
+              } else if (userId === "LNudqBX1odcAbVKBqoh6VGpgjj43" && request.status === "initial_approval") {
                 return (
                   <tr key={index}>
                     <td>{request.borrowerEmail}</td>
@@ -175,8 +241,8 @@ const RequestList = () => {
                       </button>
                     </td>
                   </tr>
-                );
-              } else if (userId === "OUaIDJiaTAT9cOpvCG8L3rVhNm32" && request.status === "Fully Approved") {
+                );       //LAB TECH
+              } else if (userId === "OUaIDJiaTAT9cOpvCG8L3rVhNm32" && (request.status === "full_approval" || request.status === "released" || request.status === "returned")) {
                 return (
                   <tr key={index}>
                     <td>{request.borrowerEmail}</td>
@@ -288,18 +354,42 @@ const RequestList = () => {
                 </div>
                 <p>Status: {selectedEquipment.status}</p>
                 <div className="d-flex justify-content-between">
-                  <button
-                    className="btn btn-success"
-                    onClick={() => handleAcceptRequest(selectedEquipment)}
-                  >
-                    Verify
-                  </button>
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => handleRejectRequest(selectedEquipment)}
-                  >
-                    Reject
-                  </button>
+                {userId === "MOaqu8jBfGMh4QpdWQ48ETYWGuO2" && (
+                    <>
+                    <button
+                        className="btn btn-success"
+                        onClick={() => handleAcceptRequest(selectedEquipment)}
+                    >
+                        Verify
+                    </button>
+                    <button
+                        className="btn btn-danger"
+                        onClick={() => handleRejectRequest(selectedEquipment)}
+                    >
+                        Reject
+                    </button>
+                    </>
+                )}
+                {userId === "LNudqBX1odcAbVKBqoh6VGpgjj43" && (
+                    <>
+                    <button className="btn btn-primary" onClick={() => handleReleaseForm(selectedEquipment)}>
+                      Release Form
+                    </button>
+                    <button className="btn btn-danger" onClick={() => handleRejectRequest(selectedEquipment)}>
+                        Reject
+                    </button>
+                  </>
+                )}
+                {userId === "OUaIDJiaTAT9cOpvCG8L3rVhNm32" && (
+                    <>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handleEquipAction(selectedEquipment)}
+                    >
+                      {selectedEquipment.status === 'full_approval' ? 'Release' : 'Return'}
+                    </button>
+                  </>
+                )}
                 </div>
               </div>
             </div>
@@ -311,5 +401,3 @@ const RequestList = () => {
 };
 
 export default RequestList;
-
-      {/* <h1>User ID: {userId}</h1> */}

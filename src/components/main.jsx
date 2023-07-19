@@ -10,20 +10,19 @@ import Dashboard from './dashboard/dashboard.jsx';
 import Display from './equipment/equipment.jsx'; 
 import Equipments from './equipment/display.jsx';
 import Requests from './request/request.jsx';
+import RequestArchive from './request/requestarchive.jsx';
 
 // import { generateReleaseFormID } from "./release/releaseform.js";
 import { getDocumentsWithReleaseFormID } from './release/getallreleaseform.js'
+import  RequestBorrower  from './request/reqborrower.jsx';
+// import { noticeReturn, noticeMissing } from './email/notice.js'
 
 const auth = getAuth();
 onAuthStateChanged(auth, (user) => {});
 
 const MainPage = () => {
-
-  // const documentId = 'ZzAH9A68I6srEiNYhQTs';
-  // const borrowerType = 'student';
-  // generateReleaseFormID(documentId, borrowerType);
-
-  getDocumentsWithReleaseFormID();
+  // noticeReturn('19103134@usc.edu.ph');
+  // noticeMissing('19103134@usc.edu.ph');
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
@@ -66,6 +65,7 @@ const MainPage = () => {
           {activeTab === 'equipments' && <Equipments />}
           {activeTab === 'display' && <Display />}
           {activeTab === 'requests' && <Requests />}
+          {activeTab === 'requestarchive' && <RequestArchive />}
         </>
       ) : (
         <>

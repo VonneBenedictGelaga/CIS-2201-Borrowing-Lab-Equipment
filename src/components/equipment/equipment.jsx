@@ -66,10 +66,11 @@ const Equipment = () => {
         description: equipmentData.description,
         equipName: equipmentData.name,
         serialNum: equipmentData.serialNumber,
-        equipQuantity: equipmentData.quantity,
+        total_quantity: equipmentData.quantity,
         brand: equipmentData.brand,
         equipType: equipmentData.equipmentType,
         status: 'available',
+        total_borrowed: 0
       });
 
       console.log('Form data saved to Firestore');

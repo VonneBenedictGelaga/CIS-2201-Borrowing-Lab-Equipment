@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { auth } from "../../config/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import '../../styles/temp.css';
+import USCLogo from '../../images/University_of_San_Carlos_logo.png';
 
 export const Login = ({ onClose, onDocumentId }) => {
   const [email, setEmail] = useState("");
@@ -62,29 +64,41 @@ export const Login = ({ onClose, onDocumentId }) => {
   return (
     <div className="overlay">
       <div className="expanded-card">
-        <div className="card col-4 insertEquipment">
+        <div className="card col-4 insertEquipment text-center">
           <div className="card-header">
-            <div className="row">
-              <div className="col-11">
+            <div className="row align-items-center">
+              <div className="text-left">
                 <h5 className="card-title">LOGIN DETAILS</h5>
               </div>
-              <div className="col-1 text-right">
+              <div className="text-right">
                 <button className="btn btn-close" onClick={handleClose}></button>
               </div>
             </div>
           </div>
           <div className="card-body">
-            <input
-              className="form-control"
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              className="form-control"
-              placeholder="Password"
-              type="password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="form-group">
+              <img src={USCLogo} alt="USC Logo" className="logo-logging" />
+            </div>
+            <br></br>
+            <div className="form-group">
+              <label htmlFor="email">Email:</label>
+              <input
+                id="email"
+                className="form-control mb-3"
+                placeholder="e.g. @usc.edu.ph"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Password:</label>
+              <input
+                id="password"
+                className="form-control mb-3"
+                placeholder="Enter your password"
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
             <button className="btn btn-primary" onClick={login}>
               Sign in
             </button>
@@ -92,9 +106,9 @@ export const Login = ({ onClose, onDocumentId }) => {
         </div>
       </div>
     </div>
-  );
-};
-
+  );  
+  
+}  
 
 function validate_email(email) {
   const expression = /^\w{8}@usc\.edu\.ph$/;
