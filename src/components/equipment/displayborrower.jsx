@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Pagination, Table, Dropdown } from 'react-bootstrap';
+import { Pagination, Table, Dropdown, Modal, Button } from 'react-bootstrap';
+import './displayborrower.css';
 import '../../styles/layout.css';
 import {
   getFirestore,
@@ -295,7 +296,7 @@ const DisplayBorrower = () => {
           </div>
 
           <div className="row">
-            <div className="form-group col-md-4">
+            <div className="form-group col-md-3">
               <label htmlFor="quantity">Quantity</label>
               <div className="input-group">
                 <span className="input-group-btn">
@@ -329,7 +330,7 @@ const DisplayBorrower = () => {
               </div>
             </div>
 
-            <div className="form-group col-md-4">
+            <div className="form-group col-md-3">
               <label htmlFor="brand">Brand</label>
               <input
                 type="text"
@@ -339,7 +340,7 @@ const DisplayBorrower = () => {
                 readOnly
               />
             </div>
-            <div className="form-group col-md-4">
+            <div className="form-group col-md-6">
               <label htmlFor="equipmentType">Equipment Type</label>
               <select
                 className="form-control"
@@ -357,9 +358,6 @@ const DisplayBorrower = () => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
-          </Button>
           <Button variant="primary" onClick={handleSelectEquipmentConfirm}>
             Select Equipment
           </Button>

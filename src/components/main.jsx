@@ -2,10 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 import { Login } from './login/login.jsx';
-<<<<<<< HEAD
-import  RequestBorrower  from './request/reqborrower.jsx';
-// import { noticeReturn, noticeMissing } from './email/notice.js'
-=======
 import DisplayBorrower from './equipment/displayborrower.jsx';
 import NavbarSignedOut from './navbar/signedout.jsx';
 import NavbarSignedIn from './navbar/signedin.jsx';
@@ -17,7 +13,6 @@ import Requests from './request/request.jsx';
 
 // import { generateReleaseFormID } from "./release/releaseform.js";
 import { getDocumentsWithReleaseFormID } from './release/getallreleaseform.js'
->>>>>>> a94e1054680596cd4920e09ba8065be1bb4a0786
 
 const auth = getAuth();
 onAuthStateChanged(auth, (user) => {});

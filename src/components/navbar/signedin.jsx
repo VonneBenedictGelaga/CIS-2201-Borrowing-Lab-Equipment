@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth } from "../../config/firebase.js";
 import './navbar.css';
-import logo from '../../images/DCISM.jpg';
+import logo from '../../images/DCISM.png';
 
 import { BsBoxArrowRight } from "react-icons/bs";
 import { BsColumnsGap } from "react-icons/bs";
@@ -36,61 +36,63 @@ const NavbarSignedIn = () => {
   return (
     <>
       {/* Bootstrap Navbar */}
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div className="container-fluid">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <img src={logo} alt="Logo" width="200" height="40" />
-            <li className="nav-item">
-              <button
-                className={`nav-link ${activeTab === 'dashboard' ? 'active' : ''}`}
-                onClick={() => handleTabClick('dashboard')}
-              >
-                <BsColumnsGap />
-              </button>
-            </li>
-            <li className="nav-item">
-              <button
-                className={`nav-link ${activeTab === 'equipments' ? 'active' : ''}`}
-                onClick={() => handleTabClick('equipments')}
-              >
-                <BsPlusCircle />
-              </button>
-            </li>
-            <li className="nav-item">
-              <button
-                className={`nav-link ${activeTab === 'display' ? 'active' : ''}`}
-                onClick={() => handleTabClick('display')}
-              >
-                <BsDisplay />
-              </button>
-            </li>
-            <li className="nav-item">
-              <button
-                className={`nav-link ${activeTab === 'requests' ? 'active' : ''}`}
-                onClick={() => handleTabClick('requests')}
-              >
-                <BsInboxFill />
-              </button>
-            </li>
-            <li className="nav-item">
-              <button
-                className={`nav-link ${activeTab === 'releaseform' ? 'active' : ''}`}
-                onClick={() => handleTabClick('releaseform')}
-              >
-                <BsInboxFill />
-              </button>
-            </li>
-          </ul>
+    <nav className="navbar navbar-expand-lg navbar-light bg-light custom-navbar">
+      <img src={logo} alt="Logo" width="200" height="40" />
 
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <a className="nav-link" onClick={handleSignOutClick}>
-                <BsBoxArrowRight />
-              </a>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      <div className="ml-auto"> {/* Add this div to push the content to the right */}
+        <ul className="nav navbar-default">
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === 'dashboard' ? 'active' : ''}`}
+              onClick={() => handleTabClick('dashboard')}
+            >
+              <BsColumnsGap />
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === 'equipments' ? 'active' : ''}`}
+              onClick={() => handleTabClick('equipments')}
+            >
+              <BsPlusCircle />
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === 'display' ? 'active' : ''}`}
+              onClick={() => handleTabClick('display')}
+            >
+              <BsDisplay />
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === 'requests' ? 'active' : ''}`}
+              onClick={() => handleTabClick('requests')}
+            >
+              <BsInboxFill />
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === 'releaseform' ? 'active' : ''}`}
+              onClick={() => handleTabClick('releaseform')}
+            >
+              <BsInboxFill />
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <ul className="nav navbar-nav right">
+        <li className="nav-item">
+          <a className="nav-link" onClick={handleSignOutClick}>
+            <BsBoxArrowRight />
+          </a>
+        </li>
+      </ul>
+    </nav>
+
 
       {/* Render content based on the active tab */}
       {activeTab === 'dashboard' ? (

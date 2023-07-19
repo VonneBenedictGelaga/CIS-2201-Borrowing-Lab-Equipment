@@ -125,8 +125,26 @@ const EquipmentList = () => {
 
   return (
     <div className="container displayAdmin">
-      <Table className="table table-bordered table-striped custom-table" striped bordered>
-        <thead className="thead-dark">
+      {/* DROPDOWN */}
+      <div className="d-flex justify-content-start dropdown">
+        <Dropdown onSelect={handleEquipTypeSelect}>
+          <Dropdown.Toggle variant="secondary" id="dropdown-equipType">
+            {selectedEquipType === 'default' ? 'Default' : selectedEquipType}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            {equipmentTypeOptions.map((option) => (
+              <Dropdown.Item key={option.value} eventKey={option.value}>
+                {option.label}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
+      {/* DROPDOWN */}
+      
+      {/* TABLE */}
+      <Table className="table table-light custom-table" striped bordered>
+        <thead>
           <tr>
             <th>Equipment Name</th>
             <th>Brand</th>
@@ -161,53 +179,40 @@ const EquipmentList = () => {
           ))}
         </tbody>
       </Table>
-
-      <div className="row">
-        <div className="col-md-4">
-          <Pagination>
-            <Pagination.Prev
-              onClick={() => {
-                if (currentPage > 1) {
-                  paginate(currentPage - 1);
-                }
-              }}
-              disabled={currentPage === 1}
-            />
-            {Array.from({ length: totalPages }, (_, i) => (
-              <Pagination.Item
-                key={i + 1}
-                active={i + 1 === currentPage}
-                onClick={() => paginate(i + 1)}
-              >
-                {i + 1}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next
-              onClick={() => {
-                if (currentPage < totalPages) {
-                  paginate(currentPage + 1);
-                }
-              }}
-              disabled={currentPage === totalPages}
-            />
-          </Pagination>
-        </div>
-        <div className="col-md-4">
-          <Dropdown onSelect={handleEquipTypeSelect}>
-            <Dropdown.Toggle variant="secondary" id="dropdown-equipType">
-              {selectedEquipType === 'default' ? 'Default' : selectedEquipType}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {equipmentTypeOptions.map((option) => (
-                <Dropdown.Item key={option.value} eventKey={option.value}>
-                  {option.label}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
+      
+      {/* PAGINATION */}
+      <div className="d-flex justify-content-end pagination">
+        <Pagination>
+          <Pagination.Prev
+            onClick={() => {
+              if (currentPage > 1) {
+                paginate(currentPage - 1);
+              }
+            }}
+            disabled={currentPage === 1}
+          />
+          {Array.from({ length: totalPages }, (_, i) => (
+            <Pagination.Item
+              key={i + 1}
+              active={i + 1 === currentPage}
+              onClick={() => paginate(i + 1)}
+            >
+              {i + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next
+            onClick={() => {
+              if (currentPage < totalPages) {
+                paginate(currentPage + 1);
+              }
+            }}
+            disabled={currentPage === totalPages}
+          />
+        </Pagination>
       </div>
-
+      {/* PAGINATION */}
+      
+      {/* POPUP */}
       {selectedEquipment && (
         <div className="overlay">
           <div className="expanded-card">
@@ -272,7 +277,7 @@ const EquipmentList = () => {
                     </div>
                   </div>
                   <div className="row">
-                    <div className="form-group col-md-4">
+                    <div className="form-group col-md-3">
                       <label htmlFor="quantity">Quantity</label>
                       <input
                         type="text"
@@ -282,7 +287,7 @@ const EquipmentList = () => {
                         placeholder="Enter new quantity"
                       />
                     </div>
-                    <div className="form-group col-md-4">
+                    <div className="form-group col-md-3">
                       <label htmlFor="brand">Brand</label>
                       <input
                         type="text"
@@ -292,7 +297,7 @@ const EquipmentList = () => {
                         placeholder="Enter new brand"
                       />
                     </div>
-                    <div className="form-group col-md-4">
+                    <div className="form-group col-md-6">
                       <label htmlFor="equipmentType">Equipment Type</label>
                       <select
                         className="form-control"
@@ -317,6 +322,7 @@ const EquipmentList = () => {
           </div>
         </div>
       )}
+      {/* POPUP */}
     </div>
   );
 };

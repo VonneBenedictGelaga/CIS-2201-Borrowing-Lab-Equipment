@@ -9,7 +9,7 @@ const ReleaseFormPopup = ({ onClose }) => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">Release Form</h5>
-            <button className="btn btn-close" data-dismiss="modal" aria-label="Close" onClick={onClose} />
+            {/* <button className="btn btn-close" data-dismiss="modal" aria-label="Close" onClick={onClose} /> */}
           </div>
           <div className="modal-body">
             <div className="row justify-content-center">

@@ -37,13 +37,23 @@
   object-fit: contain;
 }
 
-.navbar-nav .nav-item {
+/* .navbar-nav .nav-item {
   margin-right: 25px;
   margin-top: -10px;
   width: 50px;
   height: 30px;
-}
+} */
 
 .leftest {
   margin-left: 25px;
+}
+
+.custom-navbar > img {
+  padding: 5px;
+}
+
+.right {
+  /* background-color: red; */
+  position: absolute;
+  right: 0px;
 }

@@ -2,9 +2,9 @@
   display: grid;
 }
 
-.navbar {
+/* .navbar {
   background-color: #24272C;
-}
+} */
 
 /* Insert Equipment Page */
 
@@ -17,8 +17,13 @@
   color: black;
   border: none;
   box-shadow: none;
-  left: 35%;
-  top: 8%;
+  margin: auto;
+  width: 40vw;
+  top: 50px;
+}
+
+.insertEquipment.card-body {
+  margin: 5px 5px 5px 5px;
 }
 
 /* Display Equipment Page */

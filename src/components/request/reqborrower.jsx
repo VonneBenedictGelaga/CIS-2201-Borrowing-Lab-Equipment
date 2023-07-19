@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/temp.css';
-<<<<<<< HEAD
-import { db } from '../../config/firebase';
-import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
-=======
 import { db } from '../../config/firebase'; // Import the db object
 import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore'; // Import collection, getDocs, deleteDoc, and doc
 import USClogo from '../../images/University_of_San_Carlos_logo.png';
 import { Login } from '../login/login';
 
->>>>>>> a94e1054680596cd4920e09ba8065be1bb4a0786
 
 const RequestBorrower = () => {
   const [borrowersName, setBorrowersName] = useState('');
@@ -21,13 +16,10 @@ const RequestBorrower = () => {
   const [selectedEquipment, setSelectedEquipment] = useState(null);
   const [showUpdateEquipment, setShowUpdateEquipment] = useState(false);
   const [queryItems, setQueryItems] = useState([]);
-<<<<<<< HEAD
   const [errors, setErrors] = useState({});
 
-=======
   const [showLogin, setShowLogin] = useState(false);
   
->>>>>>> a94e1054680596cd4920e09ba8065be1bb4a0786
   useEffect(() => {
     fetchQueryItems();
   }, []);
