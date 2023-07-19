@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const Layout = ({ navbar, main }) => {
   return (
     <div className="layout">
-      <div className="navbar">{navbar}</div>
+      <nav className="navbar">{navbar}</nav>
       <div className="main">{main}</div>
     </div>
   );

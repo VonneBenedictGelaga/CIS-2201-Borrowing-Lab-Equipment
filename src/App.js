@@ -22,14 +22,13 @@ const App = () => {
       unsubscribe(); // Cleanup the event listener on unmount
     };
   }, []);
-  
-    return (
-      <Layout
-        navbar={<Navbar isSignedIn={isSignedIn} />}
-        main={<DisplayBorrower />}
-        // main={<MainPage isSignedIn={isSignedIn} />}
-      />
-    );
+
+  return (
+    <Layout
+      navbar={<Navbar isSignedIn={isSignedIn} />}
+      main={<MainPage isSignedIn={isSignedIn} />}
+    />
+  );
 };
 
 export default App;

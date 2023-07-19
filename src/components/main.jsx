@@ -5,13 +5,15 @@ import { Dashboard } from './dashboard/dashboard.jsx';
 import { Home } from './landing/home.jsx';
 import { Login } from './login/login.jsx';
 import  RequestBorrower  from './request/reqborrower.jsx';
-
+// import { noticeReturn, noticeMissing } from './email/notice.js'
 
 const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
 });
 
 const MainPage = () => {
+  // noticeReturn('19103134@usc.edu.ph');
+  // noticeMissing('19103134@usc.edu.ph');
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
 
@@ -31,6 +33,8 @@ const MainPage = () => {
   const handleSignInClick = () => {
     setShowLogin(true);
   };
+
+  
 
   return (
     <main>
