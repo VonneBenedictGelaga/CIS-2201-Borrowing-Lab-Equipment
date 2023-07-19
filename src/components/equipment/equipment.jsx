@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/layout.css';
+import '../../styles/temp.css';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 

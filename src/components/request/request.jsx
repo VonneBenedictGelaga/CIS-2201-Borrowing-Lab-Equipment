@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import '../../styles/layout.css';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import '../../styles/temp.css';
+import { getFirestore, collection, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { Pagination } from 'react-bootstrap';
 
 const RequestList = () => {
   const [requestData, setRequestData] = useState([]);
@@ -9,6 +10,16 @@ const RequestList = () => {
   const [equipmentData, setEquipmentData] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [documentValue, setDocumentValue] = useState(null);
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId"); // Retrieve the user ID from local storage
+
+    if (storedUserId) {
+      setUserId(storedUserId);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchRequestData = async () => {
@@ -49,20 +60,59 @@ const RequestList = () => {
     fetchEquipmentAvailability();
   }, []);
 
+  const handleDocumentId = (documentId) => {
+    // Use the document ID as needed in the parent component
+    console.log("Received Document ID:", documentId);
+    // Perform additional actions with the document ID
+    // Set the document ID value to a state variable
+    setDocumentValue(documentId);
+  }
+  
   const handleViewDetails = (equipment) => {
     setSelectedEquipment(equipment);
   };
 
-  const handleAcceptRequest = (equipment) => {
-    // Implement the logic to accept the request
-    console.log('Accepting request:', equipment);
+  const handleAcceptRequest = async (equipment) => {
+    // Implement the logic to update the status based on the user ID
+    if (userId === "MOaqu8jBfGMh4QpdWQ48ETYWGuO2") {
+      // User ID is "MOaqu8jBfGMh4QpdWQ48ETYWGuO2" (Verify)
+      await updateStatus(equipment.id, "Initially Approved");
+      updateRequestStatus(equipment.id, "Initially Approved");
+    } else if (userId === "LNudqBX1odcAbVKBqoh6VGpgjj43") {
+      // User ID is "LNudqBX1odcAbVKBqoh6VGpgjj43" (Verify)
+      await updateStatus(equipment.id, "Fully Approved");
+      updateRequestStatus(equipment.id, "Fully Approved");
+    }
   };
-
-  const handleRejectRequest = (equipment) => {
-    // Implement the logic to reject the request
-    console.log('Rejecting request:', equipment);
+  
+  const handleRejectRequest = async (equipment) => {
+    // Implement the logic to update the status to "Rejected"
+    await updateStatus(equipment.id, "Rejected");
+    updateRequestStatus(equipment.id, "Rejected");
   };
-
+  
+  const updateStatus = async (equipmentId, newStatus) => {
+    try {
+      const db = getFirestore();
+      const requestRef = doc(db, 'Request', equipmentId);
+      await updateDoc(requestRef, { status: newStatus });
+      console.log(`Updated status for equipment ID ${equipmentId} to ${newStatus}`);
+    } catch (error) {
+      console.log('Error updating status:', error);
+    }
+  };
+  
+  const updateRequestStatus = (equipmentId, newStatus) => {
+    setRequestData((prevData) =>
+      prevData.map((request) => {
+        if (request.id === equipmentId) {
+          return { ...request, status: newStatus };
+        }
+        return request;
+      })
+    );
+  };  
+  
   // Get current items based on pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -88,23 +138,65 @@ const RequestList = () => {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((request, index) => (
-            <tr key={index}>
-              <td>{request.borrowerEmail}</td>
-              <td>{request.borrowerName}</td>
-              <td>{request.dateBorrowed}</td>
-              <td>{request.dateReturned}</td>
-              <td>{request.status3}</td>
-              <td>
-                <button
-                  className="btn btn-primary btn-sm"
-                  onClick={() => handleViewDetails(request)}
-                >
-                  View
-                </button>
-              </td>
-            </tr>
-          ))}
+        {currentItems.map((request, index) => {
+              // Check the user ID and request status to determine if the table row should be displayed
+              if (userId === "MOaqu8jBfGMh4QpdWQ48ETYWGuO2" && request.status === "Verified") {
+                return (
+                  <tr key={index}>
+                    <td>{request.borrowerEmail}</td>
+                    <td>{request.borrowerName}</td>
+                    <td>{request.dateBorrowed}</td>
+                    <td>{request.dateReturned}</td>
+                    <td>{request.status}</td>
+                    <td>
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => handleViewDetails(request)}
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                );
+              } else if (userId === "LNudqBX1odcAbVKBqoh6VGpgjj43" && (request.status === "Initially Approved" || request.status === "Released" || request.status === "Returned")) {
+                return (
+                  <tr key={index}>
+                    <td>{request.borrowerEmail}</td>
+                    <td>{request.borrowerName}</td>
+                    <td>{request.dateBorrowed}</td>
+                    <td>{request.dateReturned}</td>
+                    <td>{request.status}</td>
+                    <td>
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => handleViewDetails(request)}
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                );
+              } else if (userId === "OUaIDJiaTAT9cOpvCG8L3rVhNm32" && request.status === "Fully Approved") {
+                return (
+                  <tr key={index}>
+                    <td>{request.borrowerEmail}</td>
+                    <td>{request.borrowerName}</td>
+                    <td>{request.dateBorrowed}</td>
+                    <td>{request.dateReturned}</td>
+                    <td>{request.status}</td>
+                    <td>
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => handleViewDetails(request)}
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                );
+              }
+              return null;
+            })}
         </tbody>
       </table>
 
@@ -194,15 +286,13 @@ const RequestList = () => {
                     readOnly
                   />
                 </div>
-                <p>Status 1: {selectedEquipment.status1}</p>
-                <p>Status 2: {selectedEquipment.status2}</p>
-                <p>Status 3: {selectedEquipment.status3}</p>
+                <p>Status: {selectedEquipment.status}</p>
                 <div className="d-flex justify-content-between">
                   <button
                     className="btn btn-success"
                     onClick={() => handleAcceptRequest(selectedEquipment)}
                   >
-                    Accept
+                    Verify
                   </button>
                   <button
                     className="btn btn-danger"
@@ -221,3 +311,5 @@ const RequestList = () => {
 };
 
 export default RequestList;
+
+      {/* <h1>User ID: {userId}</h1> */}

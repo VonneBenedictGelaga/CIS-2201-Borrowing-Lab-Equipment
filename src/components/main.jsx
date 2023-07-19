@@ -1,21 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
-import { Dashboard } from './dashboard/dashboard.jsx';
-import { Home } from './landing/home.jsx';
 import { Login } from './login/login.jsx';
+<<<<<<< HEAD
 import  RequestBorrower  from './request/reqborrower.jsx';
 // import { noticeReturn, noticeMissing } from './email/notice.js'
+=======
+import DisplayBorrower from './equipment/displayborrower.jsx';
+import NavbarSignedOut from './navbar/signedout.jsx';
+import NavbarSignedIn from './navbar/signedin.jsx';
+
+import Dashboard from './dashboard/dashboard.jsx';
+import Display from './equipment/equipment.jsx'; 
+import Equipments from './equipment/display.jsx';
+import Requests from './request/request.jsx';
+
+// import { generateReleaseFormID } from "./release/releaseform.js";
+import { getDocumentsWithReleaseFormID } from './release/getallreleaseform.js'
+>>>>>>> a94e1054680596cd4920e09ba8065be1bb4a0786
 
 const auth = getAuth();
-onAuthStateChanged(auth, (user) => {
-});
+onAuthStateChanged(auth, (user) => {});
 
 const MainPage = () => {
   // noticeReturn('19103134@usc.edu.ph');
   // noticeMissing('19103134@usc.edu.ph');
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [activeTab, setActiveTab] = useState('home');
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -38,23 +54,29 @@ const MainPage = () => {
 
   return (
     <main>
-          {isSignedIn ? (
-            <Dashboard />
-          ) : showLogin ? (
-            <Login />
-          ) : (
-            <div style={{ display: 'flex' }}>
-            <div style={{ flex: '1' }}>
-              <Home handleSignInClick={handleSignInClick} />
-            </div>
-            <div style={{ flex: '1' }}>
-              <RequestBorrower />
-            </div>
-          </div>
-          )}
-        
+      {/* Conditionally render the appropriate navbar */}
+      {isSignedIn ? (
+        <NavbarSignedIn activeTab={activeTab} handleTabClick={handleTabClick} />
+      ) : (
+        <NavbarSignedOut activeTab={activeTab} handleTabClick={handleTabClick} />
+      )}
+
+      {/* Render content based on the active tab and user sign-in status */}
+      {isSignedIn ? (
+        <>
+          {activeTab === 'equipments' && <Equipments />}
+          {activeTab === 'display' && <Display />}
+          {activeTab === 'requests' && <Requests />}
+        </>
+      ) : (
+        <>
+          {activeTab === 'equipments' && <DisplayBorrower />}
+        </>
+      )}
     </main>
   );
 };
 
 export default MainPage;
+
+

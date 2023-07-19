@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Pagination, Table, Dropdown, Modal, Button } from 'react-bootstrap';
-import './displayborrower.css';
-
+import { Pagination, Table, Dropdown } from 'react-bootstrap';
+import '../../styles/layout.css';
 import {
   getFirestore,
   collection,

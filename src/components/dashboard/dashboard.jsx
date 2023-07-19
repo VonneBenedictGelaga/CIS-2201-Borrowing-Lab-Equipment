@@ -1,9 +1,10 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css'; 
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-export const Dashboard = () => {
-    return (
-      <h1>Dashboard</h1>
-    );
-  }; 
+const Dashboard = () => {
+  return (
+    <h1>Dashboard</h1>
+  );
+};
 
+export default Dashboard;

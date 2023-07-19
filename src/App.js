@@ -2,9 +2,7 @@ import React from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useState, useEffect } from "react";
 
-import Layout from  "./components/layout";
-import Navbar from "./components/navbar";
-import DisplayBorrower from "./components/equipment/displayborrower"
+import Layout from "./components/layout";
 import MainPage from "./components/main";
 
 const App = () => {
@@ -15,7 +13,7 @@ const App = () => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
-      console.log(user);
+      setIsSignedIn(!!user);
     });
 
     return () => {
@@ -25,7 +23,6 @@ const App = () => {
 
   return (
     <Layout
-      navbar={<Navbar isSignedIn={isSignedIn} />}
       main={<MainPage isSignedIn={isSignedIn} />}
     />
   );
