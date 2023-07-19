@@ -1,6 +1,8 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import '../dashboard/dashboard.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 export const Dashboard = () => {
     return (
       <div className='container'>
@@ -13,20 +15,24 @@ export const Dashboard = () => {
           <div className='containerStat'>
         
               <div className='row'>
-                <div className='col-md-3 grid-cell'>
-                <h1 className='Heading'>Requests</h1>
-                <div class="dropdown">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Computer</a>
-                    <a class="dropdown-item" href="#">Server</a>
-                    <a class="dropdown-item" href="#">Computer Equipment</a>
+              <div className='col-md-3 grid-cell'>
+                  <h1 className='Heading'>Requests</h1>
+                  <div className="dropdown">
+                    <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    </button>
+                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a className="dropdown-item" href="#">Computer</a>
+                      <a className="dropdown-item" href="#">Server</a>
+                      <a className="dropdown-item" href="#">Networking Equipment</a>
+                      <a className="dropdown-item" href="#">Peripherals</a>
+                      <a className="dropdown-item" href="#">Power Tools</a>
+                      <a className="dropdown-item" href="#">Others</a>
+                    </div>
                   </div>
+                  <h2 className='subHeading'>Total:</h2>
                 </div>
 
-                </div>
-                <div className='col-md-3 grid-cell'>
+                  <div className='col-md-3 grid-cell'>
                   <h2 className='subHeading'>Verified:</h2>
                   <h2 className='subHeading'>20/100</h2>
                 </div>
@@ -42,7 +48,6 @@ export const Dashboard = () => {
 
               <div className='row'>
                 <div className='col-md-3 grid-cell'>
-                <h2 className='subHeading'>Total:</h2>
                 <h1 className='numberHead'>100</h1>
                 </div>
                 <div className='col-md-3 grid-cell'>
@@ -77,7 +82,18 @@ export const Dashboard = () => {
                 <h2 className='subHeading'>100</h2>
               </div>
               <div className='col-md-3 grid-cell'>
-                <button>Period:dropdown</button>
+              <div class="dropdown">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Computer</a>
+                    <a class="dropdown-item" href="#">Server</a>
+                    <a class="dropdown-item" href="#">Networking Equipment</a>
+                    <a class="dropdown-item" href="#">Peripherals</a>
+                    <a class="dropdown-item" href="#">Power Tools</a>
+                    <a class="dropdown-item" href="#">Others</a>
+                  </div>
+                </div>
               </div>
             </div>
 
