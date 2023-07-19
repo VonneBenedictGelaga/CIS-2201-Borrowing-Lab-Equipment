@@ -200,34 +200,38 @@ const RequestList = () => {
         </tbody>
       </table>
 
-      <Pagination>
-        <Pagination.Prev
-          onClick={() => {
-            if (currentPage > 1) {
-              paginate(currentPage - 1);
-            }
-          }}
-          disabled={currentPage === 1}
-        />
-        {Array.from({ length: totalPages }, (_, i) => (
-          <Pagination.Item
-            key={i + 1}
-            active={i + 1 === currentPage}
-            onClick={() => paginate(i + 1)}
-          >
-            {i + 1}
-          </Pagination.Item>
-        ))}
-        <Pagination.Next
-          onClick={() => {
-            if (currentPage < totalPages) {
-              paginate(currentPage + 1);
-            }
-          }}
-          disabled={currentPage === totalPages}
-        />
-      </Pagination>
-
+      {/* PAGINATION */}
+      <div className="d-flex justify-content-end pagination">
+        <Pagination>
+          <Pagination.Prev
+            onClick={() => {
+              if (currentPage > 1) {
+                paginate(currentPage - 1);
+              }
+            }}
+            disabled={currentPage === 1}
+          />
+          {Array.from({ length: totalPages }, (_, i) => (
+            <Pagination.Item
+              key={i + 1}
+              active={i + 1 === currentPage}
+              onClick={() => paginate(i + 1)}
+            >
+              {i + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next
+            onClick={() => {
+              if (currentPage < totalPages) {
+                paginate(currentPage + 1);
+              }
+            }}
+            disabled={currentPage === totalPages}
+          />
+        </Pagination>
+      </div>
+      {/* PAGINATION */}
+      
       {selectedEquipment && (
         <div className="overlay">
           <div className="expanded-card">
@@ -287,7 +291,7 @@ const RequestList = () => {
                   />
                 </div>
                 <p>Status: {selectedEquipment.status}</p>
-                <div className="d-flex justify-content-between">
+                <div className="d-flex justify-content-end custom-requestbtn">
                   <button
                     className="btn btn-success"
                     onClick={() => handleAcceptRequest(selectedEquipment)}

@@ -73,14 +73,6 @@ const NavbarSignedIn = () => {
               <BsInboxFill />
             </button>
           </li>
-          <li className="nav-item">
-            <button
-              className={`nav-link ${activeTab === 'releaseform' ? 'active' : ''}`}
-              onClick={() => handleTabClick('releaseform')}
-            >
-              <BsInboxFill />
-            </button>
-          </li>
         </ul>
       </div>
 
