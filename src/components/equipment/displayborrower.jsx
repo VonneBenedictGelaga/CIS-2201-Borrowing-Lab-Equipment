@@ -173,7 +173,7 @@ const DisplayBorrower = () => {
               <td>{equipment.equipType}</td>
               <td>{equipment.assetCode}</td>
               <td>{equipment.serialNum}</td>
-              <td>{equipment.total_quantity}</td>
+              <td>{equipment.total_quantity - equipment.total_borrowed}</td>
               <td>
                 <button
                   className="btn btn-primary"
@@ -233,7 +233,7 @@ const DisplayBorrower = () => {
         </div>
       </div>
 
-      {selectedEquipment && (
+      {selectedEquipment && (selectedEquipment.total_quantity - selectedEquipment.total_borrowed) > 0 && (
         <div className="overlay">
           <div className="expanded-card">
             <div className="card col-4 insertEquipment">

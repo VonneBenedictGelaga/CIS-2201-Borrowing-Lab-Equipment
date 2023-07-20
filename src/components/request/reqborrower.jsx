@@ -17,6 +17,7 @@ const RequestBorrower = () => {
   const [showUpdateEquipment, setShowUpdateEquipment] = useState(false);
   const [queryItems, setQueryItems] = useState([]);
   const [showLogin, setShowLogin] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   const [errors, setErrors] = useState({});
 
@@ -127,6 +128,11 @@ const RequestBorrower = () => {
 
       const requestId = docRef.id; // Retrieve the generated request ID
 
+      // Call the sendEmail function
+      sendEmail(borrowersEmail, requestId);
+
+      setShowSuccessAlert(true);
+
       // Clear the form fields
       setBorrowersName('');
       setBorrowerType('student');
@@ -136,8 +142,7 @@ const RequestBorrower = () => {
       setDateReturn('');
       setSelectedEquipment(null);
 
-      // Call the sendEmail function
-      sendEmail(borrowersEmail, requestId);
+      setTimeout(hideSuccessAlert, 7000);
     } catch (error) {
       console.log('Error submitting request:', error);
     }
@@ -195,6 +200,10 @@ const RequestBorrower = () => {
     { label: 'Others', value: 'Others' },
   ];
 
+  const hideSuccessAlert = () => {
+    setShowSuccessAlert(false);
+  };
+
   return (
     <div className='reqBorrBG'>
       <div className="container reqBorr">
@@ -213,6 +222,11 @@ const RequestBorrower = () => {
             <div className="card bg-white mb-3 reqBor_container">
               <div className="card-header">Update Form</div>
               <div className="card-body">
+              {showSuccessAlert && (
+                <div className="alert alert-success" role="alert">
+                  Form data saved successfully!
+                </div>
+              )}
                 <form className="d-flex flex-column" onSubmit={handleFormSubmit}>
                   <div className="row">
                     <div className="col-md-6">
@@ -308,7 +322,7 @@ const RequestBorrower = () => {
         {showUpdateEquipment && (
           <div className="overlay">
             <div className="expanded-card">
-              <div className="card col-6 insertEquipment">
+              <div className="card col-6 showEquipment">
                 <div className="card-header">
                   <div className="row">
                     <div className="col-11">

@@ -242,7 +242,7 @@ const RequestList = () => {
                     </td>
                   </tr>
                 );       //LAB TECH
-              } else if (userId === "OUaIDJiaTAT9cOpvCG8L3rVhNm32" && (request.status === "full_approval" || request.status === "released" || request.status === "returned")) {
+              } else if (userId === "OUaIDJiaTAT9cOpvCG8L3rVhNm32" && (request.status === "full_approval" || request.status === "released")) {
                 return (
                   <tr key={index}>
                     <td>{request.borrowerEmail}</td>

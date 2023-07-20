@@ -93,6 +93,21 @@
   background-color: transparent;
 }
 
+.showEquipment {
+  margin-top: -170px;
+  margin-left: -130px;
+  display: flex;
+  justify-content: flex-end;
+}
+ 
+.showEquipment.card {
+  color: black;
+  border: none;
+  box-shadow: none;
+  left: 35%;
+  top: 8%;
+}
+
 /* Login */
 .loggin {
   padding: 10px;
