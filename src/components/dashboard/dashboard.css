@@ -18,9 +18,14 @@
     max-width: 100vw;
 }
 
-.Top {
+.dropdown-container {
     display: flex;
-    justify-content: flex-end; /* Move firstDiv to the right */
+    align-items: center;
+  }
+
+  .dropdown {
+    position: relative;
+    margin-right: 50px; /* Add some spacing between the dropdown and "Total" */
   }
 
   .firstDiv {
@@ -43,7 +48,7 @@
     font-weight: bold;
     padding: 10px;
   }
-  
+
   .containerStat {
     grid-area: Middle;
     width: 100%;

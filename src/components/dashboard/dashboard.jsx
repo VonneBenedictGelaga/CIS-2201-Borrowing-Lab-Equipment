@@ -15,20 +15,22 @@ export const Dashboard = () => {
               <div className='row'>
               <div className='col-md-3 grid-cell'>
                   <h1 className='Heading'>Requests</h1>
-                  <div className="dropdown">
-                    <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    </button>
-                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a className="dropdown-item" href="#">Computer</a>
-                      <a className="dropdown-item" href="#">Server</a>
-                      <a className="dropdown-item" href="#">Networking Equipment</a>
-                      <a className="dropdown-item" href="#">Peripherals</a>
-                      <a className="dropdown-item" href="#">Power Tools</a>
-                      <a className="dropdown-item" href="#">Others</a>
+                  <div className='dropdown-container'>
+                      <div className="dropdown">
+                        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </button>
+                        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a className="dropdown-item" href="#">Computer</a>
+                          <a className="dropdown-item" href="#">Server</a>
+                          <a className="dropdown-item" href="#">Networking Equipment</a>
+                          <a className="dropdown-item" href="#">Peripherals</a>
+                          <a className="dropdown-item" href="#">Power Tools</a>
+                          <a className="dropdown-item" href="#">Others</a>
+                        </div>
+                      </div>
+                      <h2 className='subHeading'>Total:</h2>
                     </div>
                   </div>
-                  <h2 className='subHeading'>Total:</h2>
-                </div>
 
                   <div className='col-md-3 grid-cell'>
                   <h2 className='subHeading'>Verified:</h2>
