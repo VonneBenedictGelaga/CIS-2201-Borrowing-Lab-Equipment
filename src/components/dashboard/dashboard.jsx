@@ -7,7 +7,7 @@ export const Dashboard = () => {
     <div className='con'>
       <div className='container'>
           <div className ='firstDiv'>
-                <h1>Good Day! Lab Technician Erwin!</h1>
+                <h1>Good Day! Lab Technician Erwin!</h1> 
           </div>
 
           <div className='containerStat'>
