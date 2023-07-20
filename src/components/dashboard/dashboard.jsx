@@ -68,8 +68,8 @@ export const Dashboard = () => {
       <div className='dashboard container'>
         <div className='firstDiv'>
           <h1>Good Day {getRole(userId)}!</h1>
-            </div>
-            <div className='containerStat'>
+        </div>
+        <div className='containerStat'>
           <div className='row'>
             <div className='col-md-3 grid-cell'>
               <h1 className='Heading'>Requests</h1>
@@ -117,6 +117,10 @@ export const Dashboard = () => {
             <div className='col-md-2 grid-cell'>
               <h2 className='subHeading'>Rejected:</h2>
               <h2 className='subHeading'>{statistics?.statusCounts?.rejected || 0}/ {statistics?.totalRequests || 0}</h2>
+            </div>
+            <div className='col-md-2 grid-cell'>
+              <h2 className='subHeading'>Missing:</h2>
+              <h2 className='subHeading'>{statistics?.statusCounts?.missing || 0}/ {statistics?.totalRequests || 0}</h2>
             </div>
           </div>
         </div>

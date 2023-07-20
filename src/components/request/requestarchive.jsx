@@ -131,7 +131,7 @@ const ReleaseFormPopup = () => {
               <td>{request.dateReturned}</td>
               <td>{request.status}</td>
               <td>
-                {['full_approval', 'released', 'returned'].includes(request.status) && (
+                {['full_approval', 'released', 'returned', 'missing'].includes(request.status) && (
                   <button
                     className="btn btn-primary btn-sm"
                     onClick={() => handleViewDetails(request)}
@@ -190,6 +190,7 @@ const ReleaseFormPopup = () => {
               <option value="rejected">Rejected</option>
               <option value="released">Released</option>
               <option value="returned">Returned</option>
+              <option value="missing">Missing</option>
             </select>
           </div>
         </div>

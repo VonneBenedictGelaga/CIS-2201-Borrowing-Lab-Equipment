@@ -49,7 +49,8 @@ function processData(snapshot) {
     fully_approved: 0,
     rejected: 0,
     released: 0,
-    returned: 0
+    returned: 0,
+    missing: 0
   };
 
   snapshot.forEach((doc) => {

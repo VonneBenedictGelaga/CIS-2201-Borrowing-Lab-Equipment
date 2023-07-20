@@ -3,6 +3,7 @@ import '../../styles/temp.css';
 import { getFirestore, collection, getDocs, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { Pagination } from 'react-bootstrap';
 import { notifyRequestRejection, notifyRequestApproval } from '../email/notify';
+import { noticeMissing } from '../email/notice.js';
 import { updateEquipmentQuantity, updateReturnedEquipmentQuantity } from '../request/requestmath.js';
 
 const RequestList = () => {
@@ -116,6 +117,23 @@ const RequestList = () => {
     }
   };
   
+  const handleMissingEquip = async (equipment) => {
+    try {
+      // Implement the logic to update the status to "Missing" in the database
+      await updateStatus(equipment.id, 'missing');
+      updateRequestStatus(equipment.id, 'missing');
+
+      noticeMissing(equipment.borrowerEmail);
+      // Update the selected equipment status to "Missing" in the local state
+      setSelectedEquipment((prevEquipment) => ({
+        ...prevEquipment,
+        status: 'missing',
+      }));
+    } catch (error) {
+      console.log('Error updating status to Missing:', error);
+    }
+  };
+  
   const handleReleaseEquip = async (equipment) => {
     try {
       const releasedEquipment = equipment.equipment;
@@ -179,12 +197,32 @@ const RequestList = () => {
     );
   };  
   
+  const filterVisibleItems = () => {
+    let filteredItems = [];
+
+    if (userId === "MOaqu8jBfGMh4QpdWQ48ETYWGuO2") {
+      // LAB HEAD
+      filteredItems = requestData.filter((request) => request.status === "verified");
+    } else if (userId === "LNudqBX1odcAbVKBqoh6VGpgjj43") {
+      // DEPT CHAIR
+      filteredItems = requestData.filter((request) => request.status === "initial_approval");
+    } else if (userId === "OUaIDJiaTAT9cOpvCG8L3rVhNm32") {
+      // LAB TECH
+      filteredItems = requestData.filter(
+        (request) => request.status === "full_approval" || request.status === "released"
+      );
+    }
+
+    return filteredItems;
+  };
+
   // Get current items based on pagination
+  const visibleItems = filterVisibleItems();
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = requestData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = visibleItems.slice(indexOfFirstItem, indexOfLastItem);
 
-  const totalPages = Math.ceil(requestData.length / itemsPerPage);
+  const totalPages = Math.ceil(visibleItems.length / itemsPerPage);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -388,6 +426,13 @@ const RequestList = () => {
                     >
                       {selectedEquipment.status === 'full_approval' ? 'Release' : 'Return'}
                     </button>
+                    {selectedEquipment.status === 'released' && (
+                      <button 
+                      className="btn btn-danger"
+                      onClick={() => handleMissingEquip(selectedEquipment)}>
+                        Missing
+                      </button>
+                    )}
                   </>
                 )}
                 </div>
