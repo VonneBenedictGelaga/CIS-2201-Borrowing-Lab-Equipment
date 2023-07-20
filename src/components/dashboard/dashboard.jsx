@@ -1,13 +1,11 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css'; 
 import '../dashboard/dashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 export const Dashboard = () => {
     return (
+    <div className='con'>
       <div className='container'>
-        <div className='container1'>
-
           <div className ='firstDiv'>
                 <h1>Good Day! Lab Technician Erwin!</h1>
           </div>
@@ -66,7 +64,7 @@ export const Dashboard = () => {
               
           </div>
 
-          <div className='containerStat'>
+          <div className='containerStat2'>
         
             <div className='row'>
               <div className='col-md-3 grid-cell'>
@@ -111,12 +109,10 @@ export const Dashboard = () => {
               <div className='col-md-3 grid-cell'>
               </div>
             </div>
-        
+
           </div>
-
-      </div>
     </div>
-
+  </div>
 
     );
   }; 
