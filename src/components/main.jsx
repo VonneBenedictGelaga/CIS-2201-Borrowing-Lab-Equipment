@@ -5,15 +5,26 @@ import { Dashboard } from './dashboard/dashboard.jsx';
 import { Home } from './landing/home.jsx';
 import { Login } from './login/login.jsx';
 import  RequestBorrower  from './request/reqborrower.jsx';
-// import { noticeReturn, noticeMissing } from './email/notice.js'
+import getEquipmentInfo from './dashboard/dashboard_equipment.js';
+import { getRequestStatistics } from './dashboard/dashboard_requests.js';
+
 
 const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
 });
 
 const MainPage = () => {
-  // noticeReturn('19103134@usc.edu.ph');
-  // noticeMissing('19103134@usc.edu.ph');
+  
+  const period = "all";
+  getRequestStatistics(period)
+  .then((result) => {
+    console.log("Total Requests:", result.totalRequests);
+    console.log("Status Counts:", result.statusCounts);
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
+
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
 
