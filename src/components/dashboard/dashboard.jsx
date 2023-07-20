@@ -95,9 +95,7 @@ export const Dashboard = () => {
                 onChange={(e) => setPeriod(e.target.value)}
               >
                 <option value='all'>All</option>
-                <option value='week'>Last Week</option>
-                <option value='month'>Last Month</option>
-                <option value='year'>Last Year</option>
+                <option value='upcoming'>Upcoming</option>
               </select>
             </div>
           </div>

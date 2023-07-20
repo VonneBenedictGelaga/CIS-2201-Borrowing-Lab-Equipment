@@ -20,15 +20,22 @@ export async function getRequestStatistics(period) {
       case "all":
         startDate = null; // No start date, get all requests
         break;
+      case "upcoming":
+        startDate = today.toISOString().slice(0, 10); // Get today's date in "YYYY-MM-DD" format
+        break;
       default:
-        throw new Error("Invalid period value. Accepted values are 'week', 'month', 'year', or 'all'.");
+        throw new Error("Invalid period value. Accepted values are 'week', 'month', 'year', 'all', or 'upcoming'.");
     }
     
     const requestCollectionRef = collection(db, "Request");
 
-    //If the period is not 'all', add a filter for the startDate
-    if (startDate) {
+    // If the period is not 'all' or 'upcoming', add a filter for the startDate
+    if (startDate && period !== "upcoming") {
       const q = query(requestCollectionRef, where("dateBorrowed", ">=", startDate));
+      const snapshot = await getDocs(q);
+      return processData(snapshot);
+    } else if (period === "upcoming") {
+      const q = query(requestCollectionRef, where("dateBorrowed", ">", startDate));
       const snapshot = await getDocs(q);
       return processData(snapshot);
     } else {

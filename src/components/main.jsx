@@ -15,14 +15,11 @@ import RequestArchive from './request/requestarchive.jsx';
 // import { generateReleaseFormID } from "./release/releaseform.js";
 import { getDocumentsWithReleaseFormID } from './release/getallreleaseform.js'
 import  RequestBorrower  from './request/reqborrower.jsx';
-// import { noticeReturn, noticeMissing } from './email/notice.js'
 
 const auth = getAuth();
 onAuthStateChanged(auth, (user) => {});
 
 const MainPage = () => {
-  // noticeReturn('19103134@usc.edu.ph');
-  // noticeMissing('19103134@usc.edu.ph');
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
