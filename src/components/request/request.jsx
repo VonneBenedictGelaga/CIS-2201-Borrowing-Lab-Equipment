@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import '../../styles/layout.css';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import '../../styles/temp.css';
+import { getFirestore, collection, getDocs, doc, updateDoc, getDoc } from 'firebase/firestore';
+import { Pagination } from 'react-bootstrap';
+import { notifyRequestRejection, notifyRequestApproval } from '../email/notify';
+import { noticeMissing } from '../email/notice.js';
+import { updateEquipmentQuantity, updateReturnedEquipmentQuantity } from '../request/requestmath.js';
 
 const RequestList = () => {
   const [requestData, setRequestData] = useState([]);
@@ -9,6 +13,16 @@ const RequestList = () => {
   const [equipmentData, setEquipmentData] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [documentValue, setDocumentValue] = useState(null);
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId"); // Retrieve the user ID from local storage
+
+    if (storedUserId) {
+      setUserId(storedUserId);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchRequestData = async () => {
@@ -49,26 +63,166 @@ const RequestList = () => {
     fetchEquipmentAvailability();
   }, []);
 
+  const handleDocumentId = (documentId) => {
+    // Use the document ID as needed in the parent component
+    console.log("Received Document ID:", documentId);
+    // Perform additional actions with the document ID
+    // Set the document ID value to a state variable
+    setDocumentValue(documentId);
+  }
+  
   const handleViewDetails = (equipment) => {
     setSelectedEquipment(equipment);
   };
 
-  const handleAcceptRequest = (equipment) => {
-    // Implement the logic to accept the request
-    console.log('Accepting request:', equipment);
+  const handleAcceptRequest = async (equipment) => {
+    if (userId === "MOaqu8jBfGMh4QpdWQ48ETYWGuO2") {
+      // User ID is "MOaqu8jBfGMh4QpdWQ48ETYWGuO2" (Verify)
+      await updateStatus(equipment.id, "initial_approval");
+      updateRequestStatus(equipment.id, "initial_approval");
+    } else if (userId === "LNudqBX1odcAbVKBqoh6VGpgjj43") {
+      // User ID is "LNudqBX1odcAbVKBqoh6VGpgjj43" (Verify)
+      await updateStatus(equipment.id, "full_approval");
+      updateRequestStatus(equipment.id, "full_approval");
+
+      notifyRequestApproval(equipment.borrowerEmail);
+    }
+  };
+  
+  const handleRejectRequest = async (equipment) => {
+    // Implement the logic to update the status to "Rejected"
+    await updateStatus(equipment.id, 'rejected');
+    updateRequestStatus(equipment.id, 'rejected');
+
+    // Call notifyRequestRejection function to send rejection email
+    notifyRequestRejection(equipment.borrowerEmail);
   };
 
-  const handleRejectRequest = (equipment) => {
-    // Implement the logic to reject the request
-    console.log('Rejecting request:', equipment);
+  const handleReleaseForm = async (equipment) => {
+    // Implement the logic to update the status to "Released"
+    await updateStatus(equipment.id, "released");
+    updateRequestStatus(equipment.id, "released");
+  
+    // Call notifyRequestApproval function to send the approval email
+    notifyRequestApproval(equipment.borrowerEmail);
+  };
+  
+  const handleEquipAction = async (selectedEquipment) => {
+    if (selectedEquipment.status === 'full_approval') {
+      // Release the equipment
+      await handleReleaseEquip(selectedEquipment);
+    } else if (selectedEquipment.status === 'released') {
+      // Return the equipment
+      await handleReturnEquip(selectedEquipment);
+    }
+  };
+  
+  const handleMissingEquip = async (equipment) => {
+    try {
+      // Implement the logic to update the status to "Missing" in the database
+      await updateStatus(equipment.id, 'missing');
+      updateRequestStatus(equipment.id, 'missing');
+
+      noticeMissing(equipment.borrowerEmail);
+      // Update the selected equipment status to "Missing" in the local state
+      setSelectedEquipment((prevEquipment) => ({
+        ...prevEquipment,
+        status: 'missing',
+      }));
+    } catch (error) {
+      console.log('Error updating status to Missing:', error);
+    }
+  };
+  
+  const handleReleaseEquip = async (equipment) => {
+    try {
+      const releasedEquipment = equipment.equipment;
+      const db = getFirestore();
+  
+      // Update the equipment quantity in the Equipments collection
+      await updateEquipmentQuantity(releasedEquipment);
+  
+      // Update the request status to "Released"
+      await updateStatus(equipment.id, "released");
+      updateRequestStatus(equipment.id, "released");
+  
+      // Update the selected equipment status to "Released"
+      setSelectedEquipment((prevEquipment) => ({
+        ...prevEquipment,
+        status: "released"
+      }));
+    } catch (error) {
+      console.log('Error releasing equipment:', error);
+    }
+  };
+  
+  const handleReturnEquip = async (equipment) => {
+    try {
+      // Update the equipment quantity in the Equipments collection
+      await updateReturnedEquipmentQuantity(equipment.equipment);
+  
+      // Implement the logic to update the status to "Returned"
+      await updateStatus(equipment.id, "returned");
+      updateRequestStatus(equipment.id, "returned");
+  
+      // Update the selected equipment status to "Returned"
+      setSelectedEquipment((prevEquipment) => ({
+        ...prevEquipment,
+        status: "returned"
+      }));
+    } catch (error) {
+      console.log('Error returning equipment:', error);
+    }
+  };
+  
+  const updateStatus = async (equipmentId, newStatus) => {
+    try {
+      const db = getFirestore();
+      const requestRef = doc(db, 'Request', equipmentId);
+      await updateDoc(requestRef, { status: newStatus });
+      console.log(`Updated status for equipment ID ${equipmentId} to ${newStatus}`);
+    } catch (error) {
+      console.log('Error updating status:', error);
+    }
+  };
+  
+  const updateRequestStatus = (equipmentId, newStatus) => {
+    setRequestData((prevData) =>
+      prevData.map((request) => {
+        if (request.id === equipmentId) {
+          return { ...request, status: newStatus };
+        }
+        return request;
+      })
+    );
+  };  
+  
+  const filterVisibleItems = () => {
+    let filteredItems = [];
+
+    if (userId === "MOaqu8jBfGMh4QpdWQ48ETYWGuO2") {
+      // LAB HEAD
+      filteredItems = requestData.filter((request) => request.status === "verified");
+    } else if (userId === "LNudqBX1odcAbVKBqoh6VGpgjj43") {
+      // DEPT CHAIR
+      filteredItems = requestData.filter((request) => request.status === "initial_approval");
+    } else if (userId === "OUaIDJiaTAT9cOpvCG8L3rVhNm32") {
+      // LAB TECH
+      filteredItems = requestData.filter(
+        (request) => request.status === "full_approval" || request.status === "released"
+      );
+    }
+
+    return filteredItems;
   };
 
   // Get current items based on pagination
+  const visibleItems = filterVisibleItems();
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = requestData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = visibleItems.slice(indexOfFirstItem, indexOfLastItem);
 
-  const totalPages = Math.ceil(requestData.length / itemsPerPage);
+  const totalPages = Math.ceil(visibleItems.length / itemsPerPage);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -88,23 +242,65 @@ const RequestList = () => {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((request, index) => (
-            <tr key={index}>
-              <td>{request.borrowerEmail}</td>
-              <td>{request.borrowerName}</td>
-              <td>{request.dateBorrowed}</td>
-              <td>{request.dateReturned}</td>
-              <td>{request.status3}</td>
-              <td>
-                <button
-                  className="btn btn-primary btn-sm"
-                  onClick={() => handleViewDetails(request)}
-                >
-                  View
-                </button>
-              </td>
-            </tr>
-          ))}
+        {currentItems.map((request, index) => {
+                      // LAB HEAD
+              if (userId === "MOaqu8jBfGMh4QpdWQ48ETYWGuO2" && request.status === "verified") {
+                return (
+                  <tr key={index}>
+                    <td>{request.borrowerEmail}</td>
+                    <td>{request.borrowerName}</td>
+                    <td>{request.dateBorrowed}</td>
+                    <td>{request.dateReturned}</td>
+                    <td>{request.status}</td>
+                    <td>
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => handleViewDetails(request)}
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                );      //DEPT CHAIR
+              } else if (userId === "LNudqBX1odcAbVKBqoh6VGpgjj43" && request.status === "initial_approval") {
+                return (
+                  <tr key={index}>
+                    <td>{request.borrowerEmail}</td>
+                    <td>{request.borrowerName}</td>
+                    <td>{request.dateBorrowed}</td>
+                    <td>{request.dateReturned}</td>
+                    <td>{request.status}</td>
+                    <td>
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => handleViewDetails(request)}
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                );       //LAB TECH
+              } else if (userId === "OUaIDJiaTAT9cOpvCG8L3rVhNm32" && (request.status === "full_approval" || request.status === "released")) {
+                return (
+                  <tr key={index}>
+                    <td>{request.borrowerEmail}</td>
+                    <td>{request.borrowerName}</td>
+                    <td>{request.dateBorrowed}</td>
+                    <td>{request.dateReturned}</td>
+                    <td>{request.status}</td>
+                    <td>
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() => handleViewDetails(request)}
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                );
+              }
+              return null;
+            })}
         </tbody>
       </table>
 
@@ -194,22 +390,51 @@ const RequestList = () => {
                     readOnly
                   />
                 </div>
-                <p>Status 1: {selectedEquipment.status1}</p>
-                <p>Status 2: {selectedEquipment.status2}</p>
-                <p>Status 3: {selectedEquipment.status3}</p>
+                <p>Status: {selectedEquipment.status}</p>
                 <div className="d-flex justify-content-between">
-                  <button
-                    className="btn btn-success"
-                    onClick={() => handleAcceptRequest(selectedEquipment)}
-                  >
-                    Accept
-                  </button>
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => handleRejectRequest(selectedEquipment)}
-                  >
-                    Reject
-                  </button>
+                {userId === "MOaqu8jBfGMh4QpdWQ48ETYWGuO2" && (
+                    <>
+                    <button
+                        className="btn btn-success"
+                        onClick={() => handleAcceptRequest(selectedEquipment)}
+                    >
+                        Verify
+                    </button>
+                    <button
+                        className="btn btn-danger"
+                        onClick={() => handleRejectRequest(selectedEquipment)}
+                    >
+                        Reject
+                    </button>
+                    </>
+                )}
+                {userId === "LNudqBX1odcAbVKBqoh6VGpgjj43" && (
+                    <>
+                    <button className="btn btn-primary" onClick={() => handleReleaseForm(selectedEquipment)}>
+                      Release Form
+                    </button>
+                    <button className="btn btn-danger" onClick={() => handleRejectRequest(selectedEquipment)}>
+                        Reject
+                    </button>
+                  </>
+                )}
+                {userId === "OUaIDJiaTAT9cOpvCG8L3rVhNm32" && (
+                    <>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handleEquipAction(selectedEquipment)}
+                    >
+                      {selectedEquipment.status === 'full_approval' ? 'Release' : 'Return'}
+                    </button>
+                    {selectedEquipment.status === 'released' && (
+                      <button 
+                      className="btn btn-danger"
+                      onClick={() => handleMissingEquip(selectedEquipment)}>
+                        Missing
+                      </button>
+                    )}
+                  </>
+                )}
                 </div>
               </div>
             </div>

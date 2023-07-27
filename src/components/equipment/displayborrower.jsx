@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pagination, Table, Dropdown } from 'react-bootstrap';
-import '../styles/layout.css';
+import '../../styles/layout.css';
 import {
   getFirestore,
   collection,
@@ -77,13 +77,13 @@ const DisplayBorrower = () => {
 
   const handleQuantityChange = (event) => {
     const newQuantity = parseInt(event.target.value);
-    if (newQuantity >= 1 && newQuantity <= selectedEquipment.equipQuantity) {
+    if (newQuantity >= 1 && newQuantity <= (selectedEquipment.total_quantity - selectedEquipment.total_borrowed)) {
       setSelectedQuantity(newQuantity);
     }
   };
 
   const handleQuantityIncrease = () => {
-    if (selectedQuantity < selectedEquipment.equipQuantity) {
+    if (selectedQuantity < (selectedEquipment.total_quantity - selectedEquipment.total_borrowed)) {
       setSelectedQuantity(selectedQuantity + 1);
     }
   };
@@ -173,7 +173,7 @@ const DisplayBorrower = () => {
               <td>{equipment.equipType}</td>
               <td>{equipment.assetCode}</td>
               <td>{equipment.serialNum}</td>
-              <td>{equipment.equipQuantity}</td>
+              <td>{equipment.total_quantity - equipment.total_borrowed}</td>
               <td>
                 <button
                   className="btn btn-primary"
@@ -233,7 +233,7 @@ const DisplayBorrower = () => {
         </div>
       </div>
 
-      {selectedEquipment && (
+      {selectedEquipment && (selectedEquipment.total_quantity - selectedEquipment.total_borrowed) > 0 && (
         <div className="overlay">
           <div className="expanded-card">
             <div className="card col-4 insertEquipment">
@@ -312,7 +312,7 @@ const DisplayBorrower = () => {
                         id="quantity"
                         value={selectedQuantity}
                         min={1}
-                        max={selectedEquipment.equipQuantity}
+                        max={selectedEquipment.total_quantity}
                         onChange={handleQuantityChange}
                         readOnly
                       />

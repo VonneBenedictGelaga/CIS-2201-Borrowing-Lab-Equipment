@@ -51,12 +51,13 @@ export async function getRequestStatistics(period) {
 function processData(snapshot) {
   let totalRequests = 0;
   const statusCounts = {
-    Verified: 0,
+    verified: 0,
     initial_approval: 0,
     fully_approved: 0,
-    Rejected: 0,
+    rejected: 0,
     released: 0,
-    Returned: 0
+    returned: 0,
+    missing: 0
   };
 
   snapshot.forEach((doc) => {
@@ -67,3 +68,5 @@ function processData(snapshot) {
 
   return { totalRequests, statusCounts };
 }
+
+export default getRequestStatistics;

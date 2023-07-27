@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pagination, Table, Dropdown } from 'react-bootstrap';
-import '../styles/layout.css';
+import '../../styles/layout.css';
 import {
   getFirestore,
   collection,
@@ -61,7 +61,7 @@ const EquipmentList = () => {
       description: event.target.elements.description.value,
       assetCode: event.target.elements.assetCode.value,
       serialNum: event.target.elements.serialNumber.value,
-      equipQuantity: event.target.elements.quantity.value,
+      total_quantity: event.target.elements.quantity.value,
       brand: event.target.elements.brand.value,
       equipType: event.target.elements.equipmentType.value,
     };
@@ -146,7 +146,7 @@ const EquipmentList = () => {
               <td>{equipment.equipType}</td>
               <td>{equipment.assetCode}</td>
               <td>{equipment.serialNum}</td>
-              <td>{equipment.equipQuantity}</td>
+              <td>{equipment.total_quantity}</td>
               <td>
                 <button className="btn btn-primary" onClick={() => handleUpdateClick(equipment)}>
                   Update
@@ -278,7 +278,7 @@ const EquipmentList = () => {
                         type="text"
                         className="form-control"
                         id="quantity"
-                        defaultValue={selectedEquipment.equipQuantity}
+                        defaultValue={selectedEquipment.total_quantity}
                         placeholder="Enter new quantity"
                       />
                     </div>

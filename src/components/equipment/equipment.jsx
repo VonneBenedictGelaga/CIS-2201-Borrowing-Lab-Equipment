@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/layout.css';
+import '../../styles/temp.css';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
@@ -66,10 +66,11 @@ const Equipment = () => {
         description: equipmentData.description,
         equipName: equipmentData.name,
         serialNum: equipmentData.serialNumber,
-        equipQuantity: equipmentData.quantity,
+        total_quantity: equipmentData.quantity,
         brand: equipmentData.brand,
         equipType: equipmentData.equipmentType,
         status: 'available',
+        total_borrowed: 0
       });
 
       console.log('Form data saved to Firestore');
